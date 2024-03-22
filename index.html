@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AlbumSpot | 主頁</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/color-thief/2.3.0/color-thief.umd.js"></script>
+    <script src="js/typingEffect.js"></script>
+    <script src="js/colorTool.js"></script>
+    <script src="js/utile.js"></script>
+    <script src="js/data.js"></script>
+    <link rel="stylesheet" href="css/style.css">
+
+
+    <style>
+        body,
+        html {
+            height: 100%;
+            margin: 0;
+            font: 400 15px/1.8 "Lato", sans-serif;
+        }
+
+        .bgimg-1,
+        .bgimg-2,
+        .bgimg-3 {
+            position: relative;
+            opacity: 0.65;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+
+        }
+
+        .bgimg-1 {
+            background-image: url("img/img_parallax.jpg");
+            height: 100%;
+            background-attachment: fixed;
+        }
+
+        .caption {
+            position: absolute;
+            left: 0;
+            top: 50%;
+            width: 100%;
+            text-align: center;
+            color: #000000;
+
+            & span.border {
+                background-color: #ffffff;
+                color: #000000;
+                padding: 20px;
+                font-size: 30px;
+                letter-spacing: 8px;
+                margin-bottom: 50px;
+            }
+        }
+
+
+        .marquee-container {
+            display: flex;
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-end;
+        }
+
+
+
+        .contener {
+            height: calc(100% - 65px);
+            /* background-image: linear-gradient(rgba(255, 255, 255, 0.5), rgba(100, 100, 100, 0.3)); */
+
+            & section {
+                text-align: center;
+                font-size: 25px;
+            }
+        }
+
+
+
+        nav {
+            width: 100%;
+            border-bottom: 1px solid rgb(0, 0, 0);
+
+            & ul {
+                margin: 0;
+                padding: 0%;
+                display: flex;
+                list-style-type: none;
+                justify-content: center;
+
+                & li {
+                    width: 25%;
+                    transition: border-color 1s;
+                    border-bottom: 3px solid #ffffff;
+                    border-collapse: collapse;
+
+                    & a {
+                        display: block;
+                        line-height: 60px;
+                        font-size: 20px;
+                        font-weight: bold;
+                        text-align: center;
+                        text-decoration: none;
+                        color: gray;
+                        transition: color 0.5s;
+                    }
+                }
+
+                & li:hover {
+                    /* background-color: rgba(241, 241, 241, 0.8); */
+                    border-color: gray;
+                    font-weight: bold;
+
+                    & a {
+                        color: black;
+                    }
+                }
+            }
+        }
+
+        .rotate-front {
+            transform: rotateX(8deg);
+        }
+
+        .rotate-back {
+            transform: rotateX(180deg);
+        }
+
+        .rotate-back-scale0 {
+            transform: rotateX(180deg) scale(0);
+        }
+
+        .flipper-contener {
+            display: flex;
+            padding-top: 50px;
+            justify-content: space-evenly;
+            flex-wrap: wrap;
+            transition: background 0.5s ease;
+            /* box-shadow: inset 0 0 10px 5px rgba(0, 0, 0, 0.3); */
+            height: auto;
+
+            & .flip-card {
+                background-color: transparent;
+                width: 240px;
+                height: 305px;
+                margin-bottom: 20px;
+                perspective: 1000px;
+                transition: transform 0.6s;
+
+                & .flip-card-inner {
+                    position: relative;
+                    width: 100%;
+                    height: 100%;
+                    text-align: center;
+                    transition: transform 0.6s, box-shadow 0.6s;
+                    transform-style: preserve-3d;
+                    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+                    border-radius: 5px;
+
+                    & .flip-card-front,
+                    & .flip-card-back {
+                        position: absolute;
+                        width: 100%;
+                        height: 100%;
+                        border-radius: 5px;
+                        -webkit-backface-visibility: hidden;
+                        backface-visibility: hidden;
+
+                        & img {
+                            margin-top: 20px;
+                        }
+                    }
+                }
+            }
+
+            & .flip-card-front {
+                background-color: #bbb;
+                color: black;
+
+                & img {
+                    width: 160px;
+                    margin-left: 10px;
+                    /* 解決圖片偏左 */
+                    border-radius: 10px;
+                    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+                }
+
+                .album-desc {
+                    flex-direction: column;
+                    margin: 0px 10px;
+
+                    & .album-name-wrapper {
+                        display: flex;
+                        overflow: hidden;
+                        margin: 5px 10px;
+                    }
+
+                    & .album-name {
+                        display: inline-block;
+                        font-size: 25px;
+                        white-space: nowrap;
+                        text-align: left;
+                        line-height: 1;
+                        color: rgb(255, 255, 255);
+                        text-indent: 5px;
+
+                    }
+
+                    & .album-author {
+                        display: flex;
+                        font-size: 18px;
+                        color: rgba(255, 255, 255, 0.7);
+                        text-align: left;
+                        line-height: 2.5;
+                        flex-direction: space-between;
+                        align-items: center;
+                        margin-bottom: 5px;
+
+                        & img {
+                            border-radius: 50%;
+                            width: 25px;
+                            height: 25px;
+                            margin: 0px;
+                            margin-left: 15px;
+                        }
+
+                        & a {
+                            text-decoration: none;
+                            text-indent: 12px;
+                            color: rgba(255, 255, 255, 0.7);
+                        }
+
+                        & a:hover {
+                            text-decoration: underline;
+                        }
+                    }
+
+                    & .album-date {
+                        display: block;
+                        font-size: 10px;
+                        text-align: left;
+                        line-height: 1;
+                        color: rgba(255, 255, 255, 0.7);
+                        text-indent: 15px;
+                    }
+
+                }
+            }
+
+            & .flip-card-back {
+                transform: rotateX(180deg);
+                background-color: #afafaf;
+                color: rgb(0, 0, 0);
+
+                & img {
+                    border-radius: 50%;
+                }
+
+                .artist-desc {
+                    display: flex;
+                    flex-direction: column;
+                    background-color: rgba(0, 0, 0, 0.4);
+                    border-radius: 5px;
+                    padding-bottom: 3px;
+
+                    & .artist-name {
+                        color: rgba(255, 255, 255, 0.8);
+                    }
+
+                    & .album-count {
+                        color: rgba(255, 255, 255, 0.8);
+                    }
+
+                    & .monthly-listener {
+                        font-size: 10px;
+                        text-align: left;
+                        text-indent: 5px;
+                        color: rgba(255, 255, 255, 0.8);
+                    }
+                }
+            }
+
+            & .flip-card:hover .rotate-back {
+                transform: scale(1.1) rotateX(180deg);
+                z-index: 3;
+            }
+
+            & .flip-card:hover .rotate-front {
+                transform: scale(1.1) rotateX(0deg);
+                box-shadow: 0 14px 18px 0 rgba(0, 0, 0, 0.5);
+                z-index: 3;
+            }
+
+        }
+
+
+        /* 跑馬燈 */
+        @keyframes marquee {
+            0% {
+                transform: translateX(0%);
+            }
+
+            50% {
+                transform: translateX(-100%);
+
+            }
+
+            51% {
+                transform: translateX(-100%) scaleY(0);
+
+            }
+
+            54% {
+                transform: translateX(220px) scaleY(0);
+
+            }
+
+            55% {
+                transform: translateX(220px);
+
+            }
+
+            100% {
+                transform: translateX(0%);
+
+            }
+
+
+        }
+
+        .scale0 {
+            transform: scale(0);
+        }
+    </style>
+
+</head>
+
+<body>
+    <header>
+        <div id="navbar">
+            <div class="logo" onclick="redirect('index.html')">
+                <img src="img/logo.png" alt="">
+                <span>AlbumSpot</span>
+            </div>
+            <div class="navs">
+                <a href="search.html">搜尋</a>
+            </div>
+        </div>
+
+    </header>
+
+    <div class="bgimg-1">
+
+        <div class="marquee-container">
+            <marquee class="coverMarquee" behavior="alternate" direction="left" scrollamount="20">
+            </marquee>
+            <marquee class="coverMarquee" behavior="alternate" direction="right" scrollamount="25">
+            </marquee>
+            <marquee class="coverMarquee" behavior="alternate" direction="left" scrollamount="18">
+            </marquee>
+        </div>
+
+        <div class="caption">
+            <span class="border typing" typing="開啟音樂的大門" delay="0" textCursor="_" keepCursor="false"></span><br>
+            <span class="border typing" typing="探索無盡的音樂世界" delay="1000" textCursor="_" keepCursor="true"></span>
+        </div>
+
+    </div>
+
+    <div class="contener">
+
+        <section>
+            <h1>&nbsp</h1>
+        </section>
+
+        <section>
+
+            <nav>
+                <ul>
+                    <li><a href="#album" id="album">專輯</a></li>
+                    <li><a href="#artist" id="artist">藝人</a></li>
+                </ul>
+            </nav>
+
+            <div class="flipper-contener"></div>
+
+        </section>
+    </div>
+
+    <footer>
+        <!-- <p style="padding:5px 15px">This example creates a full page background image. Try to resize the browser window
+            to see how it always will cover the full screen (when scrolled to top), and that it scales nicely on all
+            screen sizes.</p> -->
+
+    </footer>
+
+    <script>
+
+        window.onscroll = function () { scrollFunction() };
+
+        document.getElementById('album').addEventListener('click', function () {
+            let cards = document.querySelectorAll('.flip-card ');
+
+            cards.forEach((card, index) => {
+                setTimeout(() => {
+                    let inner = card.querySelector(".flip-card-inner");
+
+                    if (card.querySelector(".flip-card-back")) {
+                        inner.classList.remove('rotate-back');
+                    } else {
+                        inner.classList.remove('rotate-back-scale0');
+                    }
+                    card.classList.add('rotate-front');
+                }, 200 * index);
+            });
+        });
+
+        document.getElementById('artist').addEventListener('click', function () {
+            let cards = document.querySelectorAll('.flip-card ');
+
+            cards.forEach((card, index) => {
+                setTimeout(() => {
+                    let inner = card.querySelector(".flip-card-inner");
+                    inner.classList.remove('rotate-front');
+                    if (card.querySelector(".flip-card-back")) {
+                        inner.classList.add('rotate-back');
+                    } else {
+                        inner.classList.add('rotate-back-scale0');
+                    }
+                }, 200 * index);
+            });
+        });
+
+
+        function scrollFunction() {
+            if (document.documentElement.scrollTop > 20) {
+                document.getElementById("navbar").style.top = "0";
+            } else {
+                document.getElementById("navbar").style.top = "-60px";
+            }
+            if (document.documentElement.scrollTop >= 120) {
+
+                onLoadAnimation();
+                onLoadAnimation = function () { };
+            }
+            if (document.documentElement.scrollTop >= 150) {
+                onLoadAnimation2();
+                onLoadAnimation2 = function () { };
+            }
+
+        }
+
+        
+        function pushFlipCard() {
+            let flipperContener = document.querySelector('.flipper-contener');
+            // let albums = await readFile('albums.json');
+            // let artists = await readFile('artists.json');
+            let albums = ALBUMS;
+            let artists = ARTISTS;
+
+            // albums.sort(() => (Math.random() > .5) ? 1 : -1);
+
+            let counter = 0;
+            for (let artist of artists) {
+                for (let album of artist.albums) {
+                    let parser = new DOMParser();
+                    let flipCardTemplate = `
+                    <div class="flip-card">
+                        <div class="flip-card-inner rotate-front">
+                            <div class="flip-card-front" onmouseover="changeBackgroundByElm(this)" onclick="redirect('introduce.html?type=album&album_id=${album.id}')">
+                                <img src="${album.cover}" alt="Cover">
+                                <span class="album-desc">
+                                    <div class="album-name-wrapper">
+                                        <span class="album-name">${album.name}</span>
+                                    </div>
+                                    <div class="album-author">
+                                        <img src="${album.artist_avatar}">
+                                        <a href="introduce.html?type=artist&artist_id=${artist.id}">${album.artist_en}</a>
+                                    </div>
+                                    <span class="album-date">發行時間: ${album.release_date} • ${album.songs_count}</span>
+                                </span>
+                            </div>
+                            
+                        </div>
+                    </div>`;
+                    let flipCardElm = parser.parseFromString(flipCardTemplate, "text/html").querySelector('.flip-card');
+                    drawElmBackgroundGradientByImage(flipCardElm.querySelector('.flip-card-front'), album.cover, 4);
+
+                    flipperContener.appendChild(flipCardElm);
+
+                    let albumNameElm = flipCardElm.querySelector('.album-name');
+                    let albumNameElmWidth = albumNameElm.getBoundingClientRect().width;
+                    let flipCardElmWidth = flipCardElm.getBoundingClientRect().width
+                    if (albumNameElmWidth > flipCardElmWidth) {
+                        let duration = albumNameElmWidth / flipCardElmWidth * 8
+                        albumNameElm.style.animation = `marquee ${duration}s linear infinite`;
+                    }
+
+                    flipCardElm.style.visibility = "hidden";
+                    flipCardElm.style.transform = "scale(0)";
+                    setTimeout(function () {
+                        flipCardElm.style.transform = "scale(1)"
+                        flipCardElm.style.visibility = "visible";
+                    }, 200 * counter);
+                    counter += 1;
+                }
+            }
+            for (let artist of artists) {
+                let flipCardBackTemplate = `
+                    <div class="flip-card-back" onmouseover="changeBackgroundByElm(this)" onclick="redirect('introduce.html?type=artist&artist_id=${artist.id}')">
+                        <img src="${artist.avatar}"
+                        alt="Avatar" style="width:160px;height:160px;">
+                        <span class="artist-desc">
+                            <span class="artist-name">${artist.name}</span>
+                            <span class="album-count">${artist.albums.length} 張專輯</span>
+                            <span class="monthly-listener">每月 83,534,063 名聽眾</span>
+                        </span>
+                    </div>
+                `
+                for (let elm of document.querySelectorAll(".flip-card")) {
+                    let innerElm = elm.querySelector(".flip-card-inner");
+                    if (innerElm.querySelector(".flip-card-back")) {
+                        continue;
+                    } else {
+                        let parser = new DOMParser();
+                        let flipCardBackElm = parser.parseFromString(flipCardBackTemplate, "text/html").querySelector('.flip-card-back');
+                        innerElm.appendChild(flipCardBackElm);
+                        drawElmBackgroundGradientByImage(elm.querySelector('.flip-card-back'), artist.avatar, 2);
+                        break
+                    }
+                }
+            }
+        }
+
+        async function pushCover() {
+            let marquees = document.getElementsByClassName('coverMarquee');
+            // let albums = await readFile('albumsCover.json');
+            let albums = ALBUMS;
+            for (marquee of marquees) {
+                albums.sort(() => (Math.random() > .5) ? 1 : -1);
+                for (let album of albums) {
+                    let img = document.createElement('img');
+                    img.src = album.cover;
+                    marquee.appendChild(img);
+                }
+            }
+        }
+
+        function changeBackgroundByElm(elm) {
+            let background = elm.getAttribute('style').replace('background-image: ', "").replace(';', '');
+            document.querySelector('.flipper-contener').style.backgroundColor = background.match(/rgb\([^)]+\)/g)[0];
+
+            // let background = elm.getAttribute('style');
+            // document.querySelector('.flipper-contener').style.background = background.slice(12, -1);
+        }
+
+        function onLoadAnimation() {
+            setTimeout(function () {
+                typingEffect(document.querySelector('section h1'), '踏上探索音樂之旅', 100, '_', false);
+            }, 500);
+        }
+        function onLoadAnimation2() {
+            setTimeout(function () {
+                pushFlipCard();
+            }, 1500);
+        }
+
+        pushCover();
+        applyTypingEffect();
+
+    </script>
+
+</body>
+
+</html>

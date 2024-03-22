@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/color-thief/2.3.0/color-thief.umd.js"></script>
+    <script src="js/typingEffect.js"></script>
+    <script src="js/colorTool.js"></script>
+    <script src="js/utile.js"></script>
+    <script src="js/data.js"></script>
+
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+        @keyframes gradient {
+            0% {
+                background-position: 0% 25%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 25%;
+            }
+        }
+
+        :root {
+            --main-theme: white;
+            --background-gradient: linear-gradient(-45deg, #ffffff, #ffffff);
+        }
+
+        body {
+            background: var(--background-gradient);
+            animation: gradient 20s ease infinite;
+            background-size: 400% 400%;
+            margin: 0;
+
+            & a {
+                font-weight: bolder;
+                color: var(--main-theme);
+            }
+        }
+
+        h1 {
+            margin: 15px 0px;
+            color: rgb(52, 52, 52);
+        }
+
+        h2 {
+            font-family: Georgia, serif;
+        }
+
+
+        .quote {
+
+            height: 120px;
+
+            & .quote-head,
+            .quote-foot {
+                font-size: 35px;
+                font-weight: bold;
+                text-align: left;
+                padding: 9px 10px 0 10px;
+            }
+
+            & .quote-body {
+                font-family: Georgia, serif;
+            }
+        }
+
+        aside {
+            width: 30%;
+            max-width: 300px;
+            float: right;
+            font-style: italic;
+            border: 1px solid transparent;
+            border-radius: 3px;
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+            margin-left: 20px;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+
+            & .aside-title {
+                text-align: center;
+                color: white;
+                font-family: 'Times New Roman', Times, serif;
+                width: 100%;
+                margin: 0%;
+                padding: 15px 0px;
+            }
+
+            & .aside-thumbnail {
+                padding: 0px;
+                margin: 1px;
+
+                & .flip-cover {
+                    background-color: transparent;
+                    width: 100%;
+                    height: 26vw;
+                    perspective: 1000px;
+
+                    max-height: 298px;
+                }
+
+                & .flip-cover-inner {
+                    position: relative;
+                    width: 100%;
+                    height: 100%;
+                    text-align: center;
+                    transition: transform 0.6s;
+                    transform-style: preserve-3d;
+                }
+
+                & .flip-cover:hover .flip-cover-inner {
+                    transform: rotateY(180deg);
+                }
+
+                & .front-cover,
+                & .back-cover {
+                    display: block;
+                    position: absolute;
+                    width: 100%;
+                    height: 100%;
+                    -webkit-backface-visibility: hidden;
+                    backface-visibility: hidden;
+                }
+
+                & .back-cover {
+                    transform: rotateY(180deg);
+                }
+
+            }
+
+            & .aside-information {
+                & h3 {
+                    color: white;
+                    text-align: center;
+                    font-style: normal;
+                }
+
+                & .info-item {
+                    display: flex;
+                    background-color: rgba(255, 255, 255, 0.80);
+                    padding: 15px;
+                    font-style: normal;
+                    align-items: center;
+                    margin-bottom: 1px;
+                    border-radius: 1px;
+
+                    & span:first-child {
+                        flex: 1;
+                        color: rgb(0, 0, 0);
+                        font-weight: 600;
+                        font-size: 12px;
+                    }
+
+                    & span:nth-child(2) {
+                        flex: 1;
+                        font-family: monospace;
+                        font-size: 14px;
+                        text-align: center;
+                    }
+
+                    & span:nth-child(3) {
+                        flex: 2;
+                        font-family: monospace;
+                        font-size: 14px;
+                        padding-left: 5px;
+                    }
+                }
+
+                & img {
+                    background-color: rgba(255, 255, 255, 0.80);
+                    width: 100%;
+                }
+
+                & .info-item:last-child {
+                    border-bottom: 0px;
+                }
+            }
+        }
+
+        aside ::after {
+            content: "";
+            display: table;
+            clear: right;
+        }
+
+        .contents {
+            font-family: monospace;
+
+            & p+p {
+                margin-top: 30px;
+            }
+
+            & b {
+                color: var(--main-theme);
+            }
+
+        }
+
+        .spotify-embed {
+
+            & .spotify-collapse {
+                margin-left: 50px;
+                transition: transform 0.5s;
+            }
+
+            & .rotate-up {
+                transform: rotate(0);
+            }
+
+            & .rotate-down {
+                transform: rotate(180deg);
+            }
+
+            & iframe {
+                margin-left: 15px;
+                transition: height 0.8s;
+            }
+        }
+
+        .song-table {
+            border-top: 1px solid rgb(52, 52, 52);
+            font-family: sans-serif;
+            font-size: 13px;
+            letter-spacing: 1px;
+            text-indent: inherit;
+            line-height: 2;
+
+            & table{
+
+                & thead {
+                    background-color: rgb(228 240 245);
+                    width: 100%;
+                }
+    
+                & tr {
+                    display: table-row;
+                    vertical-align: inherit;
+                    border-spacing: 0px;
+    
+                    & th {
+                        padding: 0 10px;
+                        text-align: left;
+                    }
+                    & th:nth-child(2) {
+                        width: 40%;
+                    }
+                    & th:nth-child(3) {
+                        width: 40%;
+                    }
+                    & th:nth-child(4) {
+                        width: 20%;
+                    }
+    
+                    & td {
+                        padding: 0 10px;
+                        text-align: left;
+                    }
+                    & td:nth-child(2) {
+                        width: 40%;
+                    }
+                    & td:nth-child(3) {
+                        width: 40%;
+                    }
+                    & td:nth-child(4) {
+                        width: 20%;
+                    }
+                }
+            }
+
+
+        }
+
+        .albums-anchor-point {
+            position: absolute;
+            top: -150px;
+        }
+
+        .albums-content {
+            position: relative;
+            border-top: 1px solid rgb(52, 52, 52);
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+
+            & .album {
+                margin: 20px 20px;
+                text-align: center;
+                transition: transform 0.5s;
+                cursor: pointer;
+                font-style: italic;
+
+                & img {
+                    width: 150px;
+                    border-radius: 15px;
+                    transition: border-radius 0.5s;
+                    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+                }
+            }
+
+            & .album:hover {
+                transform: scale(1.1);
+
+                & img {
+                    border-radius: 5px;
+                }
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header">
+
+        <div id="navbar">
+            <div class="logo" onclick="redirect('index.html')">
+                <img src="img/logo.png" alt="">
+                <span>AlbumSpot</span>
+            </div>
+            <div class="navs">
+                <a href="search.html">搜尋</a>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="main-content">
+        <div class="breadcrumb">
+            <i class="fa-solid fa-location-dot" style="margin-right: 10px;"></i>
+        </div>
+
+        <div class="side-tools-wrap">
+            <div class="side-tools">
+                <div class="side-tool resize-btn" onclick="resizeMainContent();">
+                    <i class="fa-solid fa-expand"></i>
+                </div>
+                <div class="side-tool" onclick="window.scrollTo({top: 0, behavior: 'smooth'});">
+                    <i class="fa-solid fa-caret-up"></i>
+                </div>
+                <div class="side-tool" onclick="window.scrollTo({top: 3000, behavior: 'smooth'});">
+                    <i class="fa-solid fa-caret-down"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="main-header">
+            <h1><i></i></h1>
+        </div>
+
+        <table class="quote">
+            <tbody>
+                <tr>
+                    <td class="quote-head" valign="top" style="color: var(--main-theme)">“ </td>
+                    <td class="quote-body"><i class="typing" typing="" delay="0" keepCursor="false" speed="10">
+
+                        </i></td>
+                    <td class="quote-foot" valign="bottom" style="color: var(--main-theme)">” </td>
+                </tr>
+                <tr>
+                    <td class="quote-footer" colspan="3" style="font-size:smaller">
+                        <p class="typing" typing="" delay="3900" keepCursor="true" speed="60"></p>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <p></p>
+
+        <aside>
+            <h2 class="aside-title">
+                <i><b></b></i>
+            </h2>
+            <figure class="aside-thumbnail">
+                <div class="flip-cover">
+                    <div class="flip-cover-inner">
+                        <img class="front-cover" src="" alt="">
+                        <img class="back-cover" src="" alt="">
+                    </div>
+                </div>
+            </figure>
+            <!-- <section class="aside-information">
+                <h3></h3>
+            </section> -->
+        </aside>
+
+        <div class="contents">
+
+        </div>
+
+        <p>&nbsp;</p>
+
+        <div class="spotify-embed">
+            <h2>
+                <i class="fa-brands fa-spotify" style="font-size:24px; color:#1DB954"></i>
+                <span>Spotify</span>
+                <i class="fa-solid fa-chevron-up spotify-collapse rotate-up" onclick="spotifyCollapse()"></i>
+            </h2>
+            <p>
+
+            </p>
+        </div>
+
+    </div>
+
+    <script>
+        document.getElementById("navbar").style.top = "0px"
+
+        function parseUrlArgs() {
+            let argsText = location.search.replace("?", "");
+            let argsPairs = argsText.split("&").map(
+                function (value) {
+                    return value.split("=");
+                })
+            let args = {};
+            for (pairs of argsPairs) {
+                args[pairs[0]] = pairs[1]
+            }
+            return args;
+        }
+
+        function setCssThemeVar(imageUrl) {
+            getMainColors(imageUrl, 5).then((result) => {
+                let colors = result;
+                let root = document.querySelector(':root');
+                root.style.setProperty('--main-theme', 'rgb(' + colors[0].join(', ') + ')');
+
+                let gradientColors = colors.map(color => 'rgb(' + color.join(',') + ')').join(', ');
+                root.style.setProperty('--background-gradient', "linear-gradient(to bottom right, " + gradientColors + ")");
+            });
+        }
+
+        function resizeMainContent() {
+            let content = document.querySelector(".main-content");
+            if (content.style.maxWidth == "1000px") {
+                content.style.maxWidth = "1500px";
+                let btn = document.querySelector(".resize-btn");
+                btn.innerHTML = '<i class="fa-solid fa-compress"></i>';
+
+            } else {
+                content.style.maxWidth = "1000px";
+                let btn = document.querySelector(".resize-btn");
+                btn.innerHTML = '<i class="fa-solid fa-expand"></i>';
+            };
+        }
+
+
+        async function applyData() {
+            let args = parseUrlArgs();
+            let type = args.type || 'album';
+
+            var bodyElm = document.querySelector('body');
+
+            if (type == "album") {
+                var albumID = args.album_id || 0;
+                var albums = ALBUMS;
+                var album = albums[albumID];
+
+                var data = album;
+                var dataName = "專輯";
+                var title = dataName + " | " + album.name;
+
+
+                document.querySelector(".breadcrumb").innerHTML += `
+                    <a class="breadcrumb-artist" href="introduce.html?type=artist&artist_id=${album.artist_id}">${album.artist_en}</a>
+                    <i class="fa-solid fa-angles-right"></i>
+                    <a href="introduce.html?type=artist&artist_id=${album.artist_id}#albums">${dataName}</a>
+                    <i class="fa-solid fa-angle-right"></i>
+                    <b>${album.name}</b>
+                `;
+
+                var infoData = {
+                    "作者": album.artist_en,
+                    "發行日期": album.release_date,
+                    "錄製日期": album.recorded,
+                    "類型": album.genres.join(", "),
+                    "時長": new Date(album.album_duration).toISOString().slice(11, -5)
+                };
+              
+                setCssThemeVar(album.cover);                  
+                
+                drawElmBackgroundGradientByImage(document.querySelector('aside'), data.cover, 2);
+                document.querySelector(".front-cover").setAttribute("src", data.cover);
+                document.querySelector(".back-cover").setAttribute("src", data.back_cover);
+
+
+                let songTableH2 = document.createElement("h2");
+                songTableH2.innerText = "歌曲";
+
+                let parser = new DOMParser();
+                let songTableTemplate =  `
+                <div class="song-table">
+                    <table>
+                        <tbody>
+                            <tr>
+                                <th scope="col">NO.</th>
+                                <th scope="col">曲名</th>
+                                <th scope="col">作者</th>
+                                <th scope="col">長度</th>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                `
+                let songTableElm = parser.parseFromString(songTableTemplate, "text/html").querySelector('.song-table');
+
+                document.querySelector(".main-content").appendChild(songTableH2);
+                document.querySelector(".main-content").appendChild(songTableElm);
+                                
+                for (let i = 0; i < album.album_songs.length; i++) {
+                    temp = `
+                    <tr>
+                        <td scope="row">${i+1}</td>
+                        <td>${album.album_songs[i].title}</td>
+                        <td>${album.album_songs[i].artist}</td>
+                        <td>${album.album_songs[i].duration}</td>
+                    </tr>
+                    `
+                    document.querySelector(".song-table tbody").innerHTML += temp;
+                }
+
+            } else if (type == "artist") {
+                var artistID = args.artist_id || 0;
+                var artists = ARTISTS;
+                var artist = artists[artistID];
+
+                var data = artist;
+                var dataName = "藝人";
+                var title = dataName + " | " + artist.name;
+
+
+                document.querySelector(".breadcrumb").innerHTML += `
+                    <a class="breadcrumb-artist" href="">藝人</a>
+                    <i class="fa-solid fa-angles-right"></i>
+                    <b>${artist.name}</b>
+                `;
+
+                var infoData = {
+                    "出生": artist.born,
+                    "暱稱": artist.nick_name,
+                    "性別": artist.gender,
+                    "類型": artist.genres.join(", "),
+                    "活躍時期": artist.years_active
+                };
+
+                setCssThemeVar(artist.avatar);
+
+
+                drawElmBackgroundGradientByImage(document.querySelector('aside'), artist.avatar, 2);
+                document.querySelector(".front-cover").setAttribute("src", artist.avatar);
+                document.querySelector(".back-cover").setAttribute("src", artist.avatar);
+
+                let albumsContentH2 = document.createElement("h2");
+                albumsContentH2.innerText = "專輯";
+
+                let parser = new DOMParser();
+                let albumsContentTemplate = `
+                <div class="albums-content">
+                    <div id="albums" class="albums-anchor-point"></div>
+                </div>
+                `
+                let albumsContentElm = parser.parseFromString(albumsContentTemplate, "text/html").querySelector('.albums-content');
+
+                document.querySelector(".main-content").appendChild(albumsContentH2);
+                document.querySelector(".main-content").appendChild(albumsContentElm);
+
+                for (let album of artist.albums) {
+                    temp = `
+                    <div class="album" onclick="redirect('introduce.html?type=album&album_id=${album.id}')">
+                        <img src="${album.cover}" alt="${album.name}">
+                        <p>${album.name}</p>
+                        <span>(${album.release_date.slice(0, 4)})</span>
+                    </div>
+                    `;
+                    document.querySelector(".albums-content").innerHTML += temp;
+                }
+
+            }
+
+
+            document.querySelector("title").innerText = title;
+
+            document.querySelector(".quote-body i").setAttribute("typing", data.quote);
+
+            let qf = document.querySelector(".quote-footer p");
+            qf.setAttribute("typing", data.quote_by);
+            qf.setAttribute("delay", data.quote.length * 10);
+
+            document.querySelector(".main-header i").innerText = data.name;
+            document.querySelector(".aside-title b").innerText = data.name;
+
+
+            function addAsideInfomation(title, elmText) {
+                let section = `
+                    <section class="aside-information">
+                        <h3>${title}</h3>
+                        ${elmText}
+                    </section>`;
+                document.querySelector("aside").innerHTML += section;
+            }
+
+            let infoItemTemplate = template`
+                <div class="info-item">
+                    <span>${0}</span>
+                    <span>|</span>
+                    <span>${1}</span>
+                </div>
+            `;
+            let infoTexts = "";
+            for (const [key, value] of Object.entries(infoData)) {
+                if (value == undefined) { continue };
+                let infoItem = infoItemTemplate(key, value);
+                infoTexts += infoItem;
+            }
+            addAsideInfomation(dataName + "資訊", infoTexts);
+
+            if (type == "artist") {
+                addAsideInfomation("簽名", `<img src="${data.signature}" width="80%" style="display: block; margin: auto"></img>`);
+            }
+
+            let contentsElm = document.querySelector(".contents");
+            for (content of data.contents) {
+                let pElm = document.createElement("p");
+                pElm.innerHTML = content;
+                contentsElm.appendChild(pElm);
+            }
+
+            document.querySelector(".spotify-embed p").innerHTML = data.spotify_embed;
+
+            applyTypingEffect();
+        }
+
+        function spotifyCollapse() {
+            let iframe = document.querySelector(".spotify-embed iframe");
+            let collapseBtn = document.querySelector(".spotify-collapse");
+            if (iframe.height < 600) {
+                iframe.height = 600;
+                collapseBtn.classList.remove("rotate-up");
+                collapseBtn.classList.add("rotate-down");
+            } else {
+                iframe.height = 350;
+                collapseBtn.classList.remove("rotate-down");
+                collapseBtn.classList.add("rotate-up");
+            }
+
+        }
+
+        applyData();
+
+    </script>
+</body>
+
+</html>

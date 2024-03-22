@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/color-thief/2.3.0/color-thief.umd.js"></script>
+    <script src="js/typingEffect.js"></script>
+    <script src="js/colorTool.js"></script>
+    <script src="js/utile.js"></script>
+    <script src="js/data.js"></script>
+
+    <title>搜尋</title>
+
+    <style>
+        body {
+            background-color: antiquewhite;
+            transition: transform 0.5s;
+            margin: 0px;
+        }
+
+        .content {
+            display: flex;
+            background-color: rgba(255, 255, 255, 0.8);
+            max-width: 1000px;
+            min-width: 500px;
+            min-height: 80vh;
+            height: auto;
+            margin: auto;
+            border-radius: 5px;
+            padding: 20px 40px;
+            transition: max-width 0.5s;
+
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+
+            .search-header {
+                font-size: 40px;
+                margin-bottom: 20px;
+                font-family: monospace;
+                font-weight: bolder;
+                text-align: left;
+                width: 100%;
+            }
+
+            .search-box {
+                width: 100%;
+                min-width: 100%;
+                text-align: left;
+
+                input[type=text] {
+                    width: 50%;
+                    height: 30px;
+                    border-radius: 10px;
+                    border: 3px solid gray;
+                    -webkit-transition: width 0.4s ease-in-out;
+                    transition: width 0.4s ease-in-out;
+                }
+
+                input[type=text]:focus {
+                    width: 100%;
+                }
+            }
+
+            .result-counter{
+                width: 100%;
+                margin: 10px 10px;
+                color: darkgrey;
+                font-weight: 600;
+            }
+        }
+
+        .result-content {
+            ol {
+                list-style-type: none;
+            }
+
+            article {
+                display: flex;
+                border-radius: 5px;
+                padding: 0px 20px 5px 20px;
+                cursor: pointer;
+                transition: border-color 0.5s, background-color 0.5s;
+                margin: 10px 0px;
+
+                .result-head {
+                    color: rgb(32, 32, 32)
+                }
+
+                .result-body {
+                    font-family: monospace;
+                    color: rgb(51, 51, 51);
+                    margin-bottom: 10px;
+                }
+
+                .result-foot {
+                    font-family: monospace;
+                    color: gray;
+                    margin-bottom: 10px;
+                    font-size: 14px;
+                }
+
+                .img-info {
+                    display: flex;
+                    margin-left: 10px;
+
+                    img {
+                        border-radius: 5px;
+                        display: block;
+                        margin: auto;
+                        width: 100px;
+                    }
+                }
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header">
+        <div id="navbar">
+            <div class="logo" onclick="redirect('index.html')">
+                <img src="img/logo.png" alt="">
+                <span>AlbumSpot</span>
+            </div>
+            <div class="navs">
+                <a href="search.html">搜尋</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="content">
+
+        <div class="search-header">
+            <span>尋找藝人或專輯</span>
+        </div>
+        <div class="search-box">
+            <input type="text" name="search" placeholder=" 專輯、藝人..">
+        </div>
+        <div class="result-counter">
+
+        </div>
+
+        <div class="result-content">
+
+            <!-- <article>
+                <div class="text-info">
+                    <h3 class="result-head">Ariana</h3>
+                    <div class="result-body">
+                        <span>Ariana is a playable character in Contra: Operation Galuga. She was voiced by Angelita Esperanza.</span>
+                    </div>
+                    <div class="result-foot">
+                        <span>Contra Wiki</span>
+                    </div>
+                </div>
+                <div class="img-info">
+                    <img src="https://i.kfs.io/artist/global/199064,0v22/fit/320x320.jpg" alt="">
+                </div>
+            </article> -->
+
+        </div>
+    </div>
+
+    <script>
+        document.getElementById("navbar").style.top = "0px"
+
+        let searchInputElm = document.querySelector(".search-box input");
+
+
+        function changeBackgroundColorByElm(elm) {
+            let imageUrl = elm.querySelector('img').getAttribute('src');
+            getMainColors(imageUrl, 1).then((result) => {
+                let mainColors = result;
+                elm.style.backgroundColor = 'rgba(' + mainColors[0] + ',' + mainColors[1] + ',' + mainColors[2] + ',' + 0.3 + ')';
+            })
+        }
+
+
+        async function search(keyword) {
+            var albums = ALBUMS;
+            var artists = ARTISTS;
+            let resultContentElm = document.querySelector(".result-content")
+
+            document.querySelector('.result-counter').innerText = "";
+            if (keyword == "") { resultContentElm.innerHTML = ""; return }
+
+            let resultTemplate = template`
+                <article onclick="redirect('${4}')" onmouseover="changeBackgroundColorByElm(this);" onmouseout="this.style.backgroundColor='rgba(0,0,0,0)'">
+                    <div class="text-info">
+                        <h3 class="result-head">${0}</h3>
+                        <div class="result-body">
+                            <span>${1}</span>
+                        </div>
+                        <div class="result-foot">
+                            <span>${2}</span>
+                        </div>
+                    </div>
+                    <div class="img-info">
+                        <img src="${3}" alt="">
+                    </div>
+                </article>
+            `
+            result = [];
+            for (artist of artists) {
+                if ([artist.name].some(function (value, index, arr) {
+                    return value.toLowerCase().includes(keyword.toLowerCase());
+                })) {
+                    result.push(resultTemplate(
+                        artist.name,
+                        artist.contents[0],
+                        `歌手 ${artist.name} 活躍時期 - ${artist.years_active}`,
+                        artist.pictures[0],
+                        `introduce.html?type=artist&artist_id=${artist.id}`
+                    )
+                    );
+                }
+            }
+            for (album of albums) {
+                if ([album.name, album.artist_en, album.artist_zh].some(function (value, index, arr) {
+                    return value.toLowerCase().includes(keyword.toLowerCase());
+                })) {
+                    result.push(resultTemplate(
+                        album.name,
+                        album.contents[0],
+                        `專輯 ${album.artist_en} - ${album.name}`,
+                        album.cover,
+                        `introduce.html?type=album&album_id=${album.id}`
+                    )
+                    );
+                }
+            }
+
+            document.querySelector('.result-counter').innerHTML = `共有 ${result.length} 項關於 <b>" ${keyword} "</b> 的結果`
+            resultContentElm.innerHTML = "";
+            for (let res of result) {
+                resultContentElm.innerHTML += res;
+            }
+
+        }
+
+        searchInputElm.addEventListener('input', async function () {
+            await search(searchInputElm.value);
+        })
+
+    </script>
+</body>
+
+</html>
