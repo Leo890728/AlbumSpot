@@ -19,16 +19,16 @@
             0% {
                 background-position: 0% 25%;
             }
-            
+
             50% {
                 background-position: 100% 50%;
             }
-            
+
             100% {
                 background-position: 0% 25%;
             }
         }
-        
+
         :root {
             --main-theme: white;
             --background-gradient: linear-gradient(-45deg, #ffffff, #ffffff);
@@ -37,7 +37,7 @@
         html {
             scroll-behavior: smooth;
         }
-        
+
         body {
             background: var(--background-gradient);
             animation: gradient 20s ease infinite;
@@ -237,42 +237,48 @@
             text-indent: inherit;
             line-height: 2;
 
-            & table{
+            & table {
 
                 & thead {
                     background-color: rgb(228 240 245);
                     width: 100%;
                 }
-    
+
                 & tr {
                     display: table-row;
                     vertical-align: inherit;
                     border-spacing: 0px;
-    
+
                     & th {
                         padding: 0 10px;
                         text-align: left;
                     }
+
                     & th:nth-child(2) {
                         width: 40%;
                     }
+
                     & th:nth-child(3) {
                         width: 40%;
                     }
+
                     & th:nth-child(4) {
                         width: 20%;
                     }
-    
+
                     & td {
                         padding: 0 10px;
                         text-align: left;
                     }
+
                     & td:nth-child(2) {
                         width: 40%;
                     }
+
                     & td:nth-child(3) {
                         width: 40%;
                     }
+
                     & td:nth-child(4) {
                         width: 20%;
                     }
@@ -486,19 +492,15 @@
                     "類型": album.genres.join(", "),
                     "時長": new Date(album.album_duration).toISOString().slice(11, -5)
                 };
-              
-                setCssThemeVar(album.cover);                  
-                
+
+                setCssThemeVar(album.cover);
+
                 drawElmBackgroundGradientByImage(document.querySelector('aside'), data.cover, 2);
                 document.querySelector(".front-cover").setAttribute("src", data.cover);
                 document.querySelector(".back-cover").setAttribute("src", data.back_cover);
 
-
-                let songTableH2 = document.createElement("h2");
-                songTableH2.innerText = "歌曲";
-
-                let parser = new DOMParser();
-                let songTableTemplate =  `
+                let songTableTemplate = `
+                <h2>歌曲</h2>
                 <div class="song-table">
                     <table>
                         <tbody>
@@ -512,15 +514,12 @@
                     </table>
                 </div>
                 `
-                let songTableElm = parser.parseFromString(songTableTemplate, "text/html").querySelector('.song-table');
+                textToElements(songTableTemplate).forEach(function(elm) {document.querySelector(".main-content").appendChild(elm)})
 
-                document.querySelector(".main-content").appendChild(songTableH2);
-                document.querySelector(".main-content").appendChild(songTableElm);
-                                
                 for (let i = 0; i < album.album_songs.length; i++) {
                     temp = `
                     <tr>
-                        <td scope="row">${i+1}</td>
+                        <td scope="row">${i + 1}</td>
                         <td>${album.album_songs[i].title}</td>
                         <td>${album.album_songs[i].artist}</td>
                         <td>${album.album_songs[i].duration}</td>
@@ -560,19 +559,13 @@
                 document.querySelector(".front-cover").setAttribute("src", artist.avatar);
                 document.querySelector(".back-cover").setAttribute("src", artist.avatar);
 
-                let albumsContentH2 = document.createElement("h2");
-                albumsContentH2.innerText = "專輯";
-
-                let parser = new DOMParser();
                 let albumsContentTemplate = `
+                <h2>專輯</h2>
                 <div class="albums-content">
                     <div id="albums" class="albums-anchor-point"></div>
                 </div>
                 `
-                let albumsContentElm = parser.parseFromString(albumsContentTemplate, "text/html").querySelector('.albums-content');
-
-                document.querySelector(".main-content").appendChild(albumsContentH2);
-                document.querySelector(".main-content").appendChild(albumsContentElm);
+                textToElements(albumsContentTemplate).forEach(function(elm) {document.querySelector(".main-content").appendChild(elm)})
 
                 for (let album of artist.albums) {
                     temp = `

@@ -31,3 +31,13 @@ function topFunction() {
 function redirect(url) {
   window.location.href = url;
 }
+
+function textToElements(text) {
+  let parser = new DOMParser();
+  let childrens = parser.parseFromString(`<div>${text}</div>`, "text/html").querySelector('div').children;
+  let result = [];
+  for (let i = 0; i < childrens.length; i++){
+    result.push(childrens.item(i));
+  };
+  return result;
+}
