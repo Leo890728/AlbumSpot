@@ -469,8 +469,7 @@
 
             if (type == "album") {
                 var albumID = args.album_id || 0;
-                var albums = ALBUMS;
-                var album = albums[albumID];
+                var album = ALBUMS.find((album) => album.id == albumID);
 
                 var data = album;
                 var dataName = "專輯";
@@ -530,8 +529,7 @@
 
             } else if (type == "artist") {
                 var artistID = args.artist_id || 0;
-                var artists = ARTISTS;
-                var artist = artists[artistID];
+                var artist = ARTISTS.find((artist) => artist.id == artistID);
 
                 var data = artist;
                 var dataName = "藝人";
