@@ -414,7 +414,7 @@
                     } else {
                         inner.classList.remove('rotate-back-scale0');
                     }
-                    card.classList.add('rotate-front');
+                    inner.classList.add('rotate-front');
                 }, 200 * index);
             });
         });
@@ -464,7 +464,7 @@
 
             // albums.sort(() => (Math.random() > .5) ? 1 : -1);
 
-            let counter = 0;
+            let counter = 1;
             for (let artist of artists) {
                 for (let album of artist.albums) {
                     let flipCardTemplate = `
