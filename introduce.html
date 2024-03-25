@@ -448,7 +448,7 @@
 
         function resizeMainContent() {
             let content = document.querySelector(".main-content");
-            if (content.style.maxWidth == "1000px") {
+            if (window.getComputedStyle(content).maxWidth == "1000px") {
                 content.style.maxWidth = "1500px";
                 let btn = document.querySelector(".resize-btn");
                 btn.innerHTML = '<i class="fa-solid fa-compress"></i>';
