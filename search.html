@@ -202,7 +202,13 @@
                     </div>
                 </article>
             `
-            result = [];
+            
+            function resultSort(a, b) {
+                return a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1 ;
+            }
+
+            let result = [];
+            artists.sort(resultSort);
             for (artist of artists) {
                 if ([artist.name].some(function (value, index, arr) {
                     return value.toLowerCase().includes(keyword.toLowerCase());
@@ -217,6 +223,8 @@
                     );
                 }
             }
+
+            albums.sort(resultSort);
             for (album of albums) {
                 if ([album.name, album.artist_en, album.artist_zh].some(function (value, index, arr) {
                     return value.toLowerCase().includes(keyword.toLowerCase());
@@ -231,6 +239,7 @@
                     );
                 }
             }
+            
 
             document.querySelector('.result-counter').innerHTML = `共有 ${result.length} 項關於 <b>" ${keyword} "</b> 的結果`
             resultContentElm.innerHTML = "";
