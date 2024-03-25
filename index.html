@@ -467,7 +467,6 @@
             let counter = 0;
             for (let artist of artists) {
                 for (let album of artist.albums) {
-                    let parser = new DOMParser();
                     let flipCardTemplate = `
                     <div class="flip-card">
                         <div class="flip-card-inner rotate-front">
@@ -487,7 +486,7 @@
                             
                         </div>
                     </div>`;
-                    let flipCardElm = parser.parseFromString(flipCardTemplate, "text/html").querySelector('.flip-card');
+                    let flipCardElm = textToElements(flipCardTemplate)[0];
                     drawElmBackgroundGradientByImage(flipCardElm.querySelector('.flip-card-front'), album.cover, 4);
 
                     flipperContener.appendChild(flipCardElm);
@@ -526,8 +525,7 @@
                     if (innerElm.querySelector(".flip-card-back")) {
                         continue;
                     } else {
-                        let parser = new DOMParser();
-                        let flipCardBackElm = parser.parseFromString(flipCardBackTemplate, "text/html").querySelector('.flip-card-back');
+                        let flipCardBackElm = textToElements(flipCardBackTemplate)[0];
                         innerElm.appendChild(flipCardBackElm);
                         drawElmBackgroundGradientByImage(elm.querySelector('.flip-card-back'), artist.avatar, 2);
                         break
