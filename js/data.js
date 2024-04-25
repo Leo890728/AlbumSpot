@@ -3276,6 +3276,10 @@ var ALBUMS_COVER = [
     }
 ]
 
+ALBUMS.sort(function (a, b) {
+    return (a.release_date < b.release_date) ? -1 : 1
+})
+
 for (let artist of ARTISTS) {
     if (artist.albums == undefined) {
         artist.albums = [];
