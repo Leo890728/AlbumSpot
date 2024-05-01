@@ -29,15 +29,16 @@ function drawElmBackgroundColorByImage(elm, imageUrl) {
 }
 
 function drawElmBackgroundGradientByImage(elm, imageUrl, numColors = 2) {
+    elm = $(elm);
     getMainColors(imageUrl, numColors).then((result) => {
         let mainColors = result;
 
         if (numColors == 1) {
             var gradientColor = "rgb("+mainColors.join(', ')+")";
-            elm.style.background = "linear-gradient(to bottom right, " + gradientColor + ',' + gradientColor + ")";
+            elm.css("background", `linear-gradient(to bottom right, ${gradientColor}, ${gradientColor})`);
         } else {
-            var gradientColors = mainColors.map(color => 'rgb(' + color.join(',') + ')').join(', ');
-            elm.style.background = "linear-gradient(to bottom right, " + gradientColors + ")";
+            var gradientColors = mainColors.map(color => `rgb(${color.join(',')})`).join(', ');
+            elm.css("background", `linear-gradient(to bottom right, ${gradientColors})`);
         }
     });
 }

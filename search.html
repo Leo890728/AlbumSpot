@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/style.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/color-thief/2.3.0/color-thief.umd.js"></script>
+    <script src="js/jquery-3.7.1.min.js"></script>
     <script src="js/typingEffect.js"></script>
     <script src="js/colorTool.js"></script>
     <script src="js/utile.js"></script>
@@ -164,27 +165,30 @@
     </div>
 
     <script>
-        document.getElementById("navbar").style.top = "0px"
-
-        let searchInputElm = document.querySelector(".search-box input");
+        $(document).ready(() => {
+            $("#navbar").css("top", "0px");
+            $(".search-box input").on('input', function (event) {
+                search($(event.target).val());
+            })
+        });
 
 
         function changeBackgroundColorByElm(elm) {
-            let imageUrl = elm.querySelector('img').getAttribute('src');
+            let imageUrl = $(elm).find('img').attr('src');
             getMainColors(imageUrl, 1).then((result) => {
                 let mainColors = result;
-                elm.style.backgroundColor = 'rgba(' + mainColors[0] + ',' + mainColors[1] + ',' + mainColors[2] + ',' + 0.3 + ')';
+                $(elm).css("backgroundColor", `rgba(${mainColors[0]}, ${mainColors[1]}, ${mainColors[2]}, 0.3)`);
             })
         }
 
 
-        async function search(keyword) {
+        function search(keyword) {
             var albums = ALBUMS;
             var artists = ARTISTS;
-            let resultContentElm = document.querySelector(".result-content")
+            let resultContentElm = $(".result-content");
 
-            document.querySelector('.result-counter').innerText = "";
-            if (keyword == "") { resultContentElm.innerHTML = ""; return }
+            $('.result-counter').text("");
+            if (keyword == "") { resultContentElm.empty(); return }
 
             let resultTemplate = template`
                 <article onclick="redirect('${4}')" onmouseover="changeBackgroundColorByElm(this);" onmouseout="this.style.backgroundColor='rgba(0,0,0,0)'">
@@ -241,17 +245,14 @@
             }
             
 
-            document.querySelector('.result-counter').innerHTML = `共有 ${result.length} 項關於 <b>" ${keyword} "</b> 的結果`
-            resultContentElm.innerHTML = "";
+            $('.result-counter').html(`共有 ${result.length} 項關於 <b>" ${keyword} "</b> 的結果`);
+            resultContentElm.empty();
             for (let res of result) {
-                resultContentElm.innerHTML += res;
+                $(res).appendTo(resultContentElm);
             }
 
         }
 
-        searchInputElm.addEventListener('input', async function () {
-            await search(searchInputElm.value);
-        })
 
     </script>
 </body>

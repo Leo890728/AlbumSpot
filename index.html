@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AlbumSpot | 主頁</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/color-thief/2.3.0/color-thief.umd.js"></script>
+    <script src="js/jquery-3.7.1.min.js"></script>
     <script src="js/typingEffect.js"></script>
     <script src="js/colorTool.js"></script>
     <script src="js/utile.js"></script>
@@ -56,7 +57,6 @@
             }
         }
 
-
         .marquee-container {
             display: flex;
             height: 100%;
@@ -67,8 +67,6 @@
             justify-content: flex-end;
         }
 
-
-
         .contener {
             height: calc(100% - 65px);
             /* background-image: linear-gradient(rgba(255, 255, 255, 0.5), rgba(100, 100, 100, 0.3)); */
@@ -78,8 +76,6 @@
                 font-size: 25px;
             }
         }
-
-
 
         nav {
             width: 100%;
@@ -128,10 +124,6 @@
 
         .rotate-back {
             transform: rotateX(180deg);
-        }
-
-        .rotate-back-scale0 {
-            transform: rotateX(180deg) scale(0);
         }
 
         .flipper-contener {
@@ -329,12 +321,8 @@
 
             }
 
-
         }
 
-        .scale0 {
-            transform: scale(0);
-        }
     </style>
 
 </head>
@@ -392,120 +380,125 @@
     </div>
 
     <footer>
-        <!-- <p style="padding:5px 15px">This example creates a full page background image. Try to resize the browser window
-            to see how it always will cover the full screen (when scrolled to top), and that it scales nicely on all
-            screen sizes.</p> -->
 
     </footer>
 
     <script>
 
-        window.onscroll = function () { scrollFunction() };
+        $(document).on("scroll", function () { scrollFunction() });
 
-        document.getElementById('album').addEventListener('click', function () {
-            let cards = document.querySelectorAll('.flip-card ');
+        $(document).ready(function (){
+                pushCover();
+                applyTypingEffect();
+            }
+        )
 
-            cards.forEach((card, index) => {
+        $('#album').on('click', function () {
+            let cards = $('.flip-card');
+
+            cards.each((index, card) => {
                 setTimeout(() => {
-                    let inner = card.querySelector(".flip-card-inner");
-
-                    if (card.querySelector(".flip-card-back")) {
-                        inner.classList.remove('rotate-back');
-                    } else {
-                        inner.classList.remove('rotate-back-scale0');
+                    let inner = $(card).find(".flip-card-inner");
+                    
+                    if (inner.find(".flip-card-back").length == 0) { 
+                        inner.fadeIn("slow"); 
                     }
-                    inner.classList.add('rotate-front');
+                    inner.removeClass('rotate-back');
+                    inner.addClass('rotate-front');
+
                 }, 200 * index);
             });
         });
 
-        document.getElementById('artist').addEventListener('click', function () {
-            let cards = document.querySelectorAll('.flip-card ');
+        $('#artist').on('click', function () {
+            let cards = $('.flip-card');
 
-            cards.forEach((card, index) => {
+            cards.each((index, card) => {
                 setTimeout(() => {
-                    let inner = card.querySelector(".flip-card-inner");
-                    inner.classList.remove('rotate-front');
-                    if (card.querySelector(".flip-card-back")) {
-                        inner.classList.add('rotate-back');
-                    } else {
-                        inner.classList.add('rotate-back-scale0');
-                    }
+                    let inner = $(card).find(".flip-card-inner");
+
+                    inner.removeClass('rotate-front');
+                    inner.addClass('rotate-back');
+                    if (inner.find(".flip-card-back").length == 0) {
+                        inner.fadeOut('fast');
+                    } 
+
                 }, 200 * index);
             });
         });
 
 
         function scrollFunction() {
-            if (document.documentElement.scrollTop > 20) {
-                document.getElementById("navbar").style.top = "0";
-            } else {
-                document.getElementById("navbar").style.top = "-60px";
-            }
-            if (document.documentElement.scrollTop >= 120) {
-
+            let scrollHeight = $(document).scrollTop();
+            $("#navbar").css("top", (scrollHeight > 20) ? "0px" : "-60px");
+            
+            if (scrollHeight >= 120) {
                 onLoadAnimation();
                 onLoadAnimation = function () { };
             }
-            if (document.documentElement.scrollTop >= 150) {
+            if (scrollHeight >= 150) {
                 onLoadAnimation2();
                 onLoadAnimation2 = function () { };
             }
-
         }
 
         
         function pushFlipCard() {
             let flipperContener = document.querySelector('.flipper-contener');
-            // let albums = await readFile('albums.json');
-            // let artists = await readFile('artists.json');
             let albums = ALBUMS;
             let artists = ARTISTS;
 
-            // albums.sort(() => (Math.random() > .5) ? 1 : -1);
-
-            let counter = 1;
+            let cardCount = 1;
             for (let artist of artists) {
                 for (let album of artist.albums) {
                     let flipCardTemplate = `
-                    <div class="flip-card">
-                        <div class="flip-card-inner rotate-front">
-                            <div class="flip-card-front" onmouseover="changeBackgroundByElm(this)" onclick="redirect('introduce.html?type=album&album_id=${album.id}')">
-                                <img src="${album.cover}" alt="Cover">
-                                <span class="album-desc">
-                                    <div class="album-name-wrapper">
-                                        <span class="album-name">${album.name}</span>
-                                    </div>
-                                    <div class="album-author">
-                                        <img src="${album.artist_avatar}">
-                                        <a href="introduce.html?type=artist&artist_id=${artist.id}">${album.artist_en}</a>
-                                    </div>
-                                    <span class="album-date">發行時間: ${album.release_date} • ${album.songs_count}</span>
-                                </span>
+                        <div class="flip-card">
+                            <div class="flip-card-inner rotate-front">
+                                <div class="flip-card-front" onmouseover="changeBackgroundByElm(this)" onclick="redirect('introduce.html?type=album&album_id=${album.id}')">
+                                    <img src="${album.cover}" alt="Cover">
+                                    <span class="album-desc">
+                                        <div class="album-name-wrapper">
+                                            <span class="album-name">${album.name}</span>
+                                        </div>
+                                        <div class="album-author">
+                                            <img src="${album.artist_avatar}">
+                                            <a href="introduce.html?type=artist&artist_id=${artist.id}">${album.artist_en}</a>
+                                        </div>
+                                        <span class="album-date">發行時間: ${album.release_date} • ${album.songs_count}</span>
+                                    </span>
+                                </div>
+                                
                             </div>
-                            
                         </div>
-                    </div>`;
-                    let flipCardElm = textToElements(flipCardTemplate)[0];
-                    drawElmBackgroundGradientByImage(flipCardElm.querySelector('.flip-card-front'), album.cover, 4);
+                    `;
+                    let flipCardElm = $(flipCardTemplate).appendTo(flipperContener);
 
-                    flipperContener.appendChild(flipCardElm);
+                    drawElmBackgroundGradientByImage(flipCardElm.find('.flip-card-front'), album.cover, 4);
 
-                    let albumNameElm = flipCardElm.querySelector('.album-name');
-                    let albumNameElmWidth = albumNameElm.getBoundingClientRect().width;
-                    let flipCardElmWidth = flipCardElm.getBoundingClientRect().width
+                    let albumNameElm = flipCardElm.find('.album-name');
+
+                    let albumNameElmWidth = albumNameElm.outerWidth();
+                    let flipCardElmWidth = flipCardElm.outerWidth();
                     if (albumNameElmWidth > flipCardElmWidth) {
-                        let duration = albumNameElmWidth / flipCardElmWidth * 8
-                        albumNameElm.style.animation = `marquee ${duration}s linear infinite`;
+                        let duration = (albumNameElmWidth / flipCardElmWidth) * 8
+                        albumNameElm.css("animation", `marquee ${duration}s linear infinite`)
                     }
 
-                    flipCardElm.style.visibility = "hidden";
-                    flipCardElm.style.transform = "scale(0)";
+                    flipCardElm.css(
+                        {
+                            visibility: "hidden",
+                            transform: "scale(0)"
+                        }
+                    )
                     setTimeout(function () {
-                        flipCardElm.style.transform = "scale(1)"
-                        flipCardElm.style.visibility = "visible";
-                    }, 200 * counter);
-                    counter += 1;
+                        flipCardElm.css(
+                        {
+                            transform: "scale(1)",
+                            visibility: "visible"
+                        }
+                    )
+                    }, 200 * cardCount);
+                    cardCount += 1;
                 }
             }
             for (let artist of artists) {
@@ -525,27 +518,23 @@
                     if (innerElm.querySelector(".flip-card-back")) {
                         continue;
                     } else {
-                        let flipCardBackElm = textToElements(flipCardBackTemplate)[0];
-                        innerElm.appendChild(flipCardBackElm);
+                        $(flipCardBackTemplate).appendTo(innerElm);
                         drawElmBackgroundGradientByImage(elm.querySelector('.flip-card-back'), artist.avatar, 2);
-                        break
+                        break;
                     }
                 }
             }
         }
 
-        async function pushCover() {
-            let marquees = document.getElementsByClassName('coverMarquee');
-            // let albums = await readFile('albumsCover.json');
-            let albums = ALBUMS;
-            for (marquee of marquees) {
-                albums.sort(() => (Math.random() > .5) ? 1 : -1);
-                for (let album of albums) {
-                    let img = document.createElement('img');
-                    img.src = album.cover;
-                    marquee.appendChild(img);
-                }
-            }
+        function pushCover() {
+            let marquees = $('.coverMarquee');
+            let albums = [...ALBUMS];
+            marquees.each(function (index, marquee) {
+                albums.sort(() => (Math.random() > .5) ? 1 : -1)
+                albums.forEach((album) => {
+                    $('<img>').attr('src', album.cover).appendTo(marquee);
+                });
+            });
         }
 
         function changeBackgroundByElm(elm) {
@@ -567,8 +556,7 @@
             }, 1500);
         }
 
-        pushCover();
-        applyTypingEffect();
+        
 
     </script>
 

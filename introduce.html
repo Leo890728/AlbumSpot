@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/color-thief/2.3.0/color-thief.umd.js"></script>
+    <script src="js/jquery-3.7.1.min.js"></script>
     <script src="js/typingEffect.js"></script>
     <script src="js/colorTool.js"></script>
     <script src="js/utile.js"></script>
@@ -420,7 +421,12 @@
     </div>
 
     <script>
-        document.getElementById("navbar").style.top = "0px"
+
+        $(document).ready(() => {
+            $("#navbar").css("top", "0px");
+            applyData();
+            applyTypingEffect();
+        })   
 
         function parseUrlArgs() {
             let argsText = location.search.replace("?", "");
@@ -447,25 +453,19 @@
         }
 
         function resizeMainContent() {
-            let content = document.querySelector(".main-content");
-            if (window.getComputedStyle(content).maxWidth == "1000px") {
-                content.style.maxWidth = "1500px";
-                let btn = document.querySelector(".resize-btn");
-                btn.innerHTML = '<i class="fa-solid fa-compress"></i>';
-
+            let content = $(".main-content");
+            if (content.css("maxWidth") == "1000px") {
+                content.css("maxWidth", "1500px");
+                $(".resize-btn").html('<i class="fa-solid fa-compress"></i>');
             } else {
-                content.style.maxWidth = "1000px";
-                let btn = document.querySelector(".resize-btn");
-                btn.innerHTML = '<i class="fa-solid fa-expand"></i>';
+                content.css("maxWidth", "1000px");
+                $(".resize-btn").html('<i class="fa-solid fa-expand"></i>');
             };
         }
 
-
-        async function applyData() {
+        function applyData() {
             let args = parseUrlArgs();
             let type = args.type || 'album';
-
-            var bodyElm = document.querySelector('body');
 
             if (type == "album") {
                 var albumID = args.album_id || 0;
@@ -476,13 +476,13 @@
                 var title = dataName + " | " + album.name;
 
 
-                document.querySelector(".breadcrumb").innerHTML += `
+                $(".breadcrumb").append(`
                     <a class="breadcrumb-artist" href="introduce.html?type=artist&artist_id=${album.artist_id}">${album.artist_en}</a>
                     <i class="fa-solid fa-angles-right"></i>
                     <a href="introduce.html?type=artist&artist_id=${album.artist_id}#albums">${dataName}</a>
                     <i class="fa-solid fa-angle-right"></i>
                     <b>${album.name}</b>
-                `;
+                `);
 
                 var infoData = {
                     "作者": album.artist_en,
@@ -494,38 +494,38 @@
 
                 setCssThemeVar(album.cover);
 
-                drawElmBackgroundGradientByImage(document.querySelector('aside'), data.cover, 2);
-                document.querySelector(".front-cover").setAttribute("src", data.cover);
-                document.querySelector(".back-cover").setAttribute("src", data.back_cover);
+                drawElmBackgroundGradientByImage($('aside'), data.cover, 2);
+                $(".front-cover").attr("src", data.cover);
+                $(".back-cover").attr("src", data.back_cover);
 
                 let songTableTemplate = `
-                <h2>歌曲</h2>
-                <div class="song-table">
-                    <table>
-                        <tbody>
-                            <tr>
-                                <th scope="col">NO.</th>
-                                <th scope="col">曲名</th>
-                                <th scope="col">作者</th>
-                                <th scope="col">長度</th>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+                    <h2>歌曲</h2>
+                    <div class="song-table">
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <th scope="col">NO.</th>
+                                    <th scope="col">曲名</th>
+                                    <th scope="col">作者</th>
+                                    <th scope="col">長度</th>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 `
-                textToElements(songTableTemplate).forEach(function(elm) {document.querySelector(".main-content").appendChild(elm)})
-
-                for (let i = 0; i < album.album_songs.length; i++) {
-                    temp = `
-                    <tr>
-                        <td scope="row">${i + 1}</td>
-                        <td>${album.album_songs[i].title}</td>
-                        <td>${album.album_songs[i].artist}</td>
-                        <td>${album.album_songs[i].duration}</td>
-                    </tr>
+                $(songTableTemplate).appendTo(".main-content")
+                
+                album.album_songs.forEach((song, index) => {
+                    let songTableTemplate = `
+                        <tr>
+                            <td scope="row">${index + 1}</td>
+                            <td>${song.title}</td>
+                            <td>${song.artist}</td>
+                            <td>${song.duration}</td>
+                        </tr>
                     `
-                    document.querySelector(".song-table tbody").innerHTML += temp;
-                }
+                    $(songTableTemplate).appendTo(".song-table tbody")
+                })
 
             } else if (type == "artist") {
                 var artistID = args.artist_id || 0;
@@ -536,11 +536,11 @@
                 var title = dataName + " | " + artist.name;
 
 
-                document.querySelector(".breadcrumb").innerHTML += `
+                $(".breadcrumb").append(`
                     <a class="breadcrumb-artist" href="">藝人</a>
                     <i class="fa-solid fa-angles-right"></i>
                     <b>${artist.name}</b>
-                `;
+                `);
 
                 var infoData = {
                     "出生": artist.born,
@@ -552,52 +552,51 @@
 
                 setCssThemeVar(artist.avatar);
 
-
-                drawElmBackgroundGradientByImage(document.querySelector('aside'), artist.avatar, 2);
-                document.querySelector(".front-cover").setAttribute("src", artist.avatar);
-                document.querySelector(".back-cover").setAttribute("src", artist.avatar);
+                drawElmBackgroundGradientByImage($('aside'), artist.avatar, 2);
+                $(".front-cover").attr("src", artist.avatar);
+                $(".back-cover").attr("src", artist.avatar);
 
                 let albumsContentTemplate = `
-                <h2>專輯</h2>
-                <div class="albums-content">
-                    <div id="albums" class="albums-anchor-point"></div>
-                </div>
-                `
-                textToElements(albumsContentTemplate).forEach(function(elm) {document.querySelector(".main-content").appendChild(elm)})
-
-                for (let album of artist.albums) {
-                    temp = `
-                    <div class="album" onclick="redirect('introduce.html?type=album&album_id=${album.id}')">
-                        <img src="${album.cover}" alt="${album.name}">
-                        <p>${album.name}</p>
-                        <span>(${album.release_date.slice(0, 4)})</span>
+                    <h2>專輯</h2>
+                    <div class="albums-content">
+                        <div id="albums" class="albums-anchor-point"></div>
                     </div>
+                `
+                $(albumsContentTemplate).appendTo(".main-content");
+                
+                for (let album of artist.albums) {
+                    let artistAlbumsTemplate = `
+                        <div class="album" onclick="redirect('introduce.html?type=album&album_id=${album.id}')">
+                            <img src="${album.cover}" alt="${album.name}">
+                            <p>${album.name}</p>
+                            <span>(${album.release_date.slice(0, 4)})</span>
+                        </div>
                     `;
-                    document.querySelector(".albums-content").innerHTML += temp;
+                    $(artistAlbumsTemplate).appendTo(".albums-content");
                 }
 
             }
 
+            $("title").text(title);
 
-            document.querySelector("title").innerText = title;
+            $(".quote-body i").attr("typing", data.quote);
 
-            document.querySelector(".quote-body i").setAttribute("typing", data.quote);
+            $(".quote-footer p").attr({
+                typing: data.quote_by,
+                delay: data.quote.length * 10
+            });
 
-            let qf = document.querySelector(".quote-footer p");
-            qf.setAttribute("typing", data.quote_by);
-            qf.setAttribute("delay", data.quote.length * 10);
-
-            document.querySelector(".main-header i").innerText = data.name;
-            document.querySelector(".aside-title b").innerText = data.name;
-
+            $(".main-header i").text(data.name);
+            $(".aside-title b").text(data.name);
 
             function addAsideInfomation(title, elmText) {
-                let section = `
+                let sectionTemplate = `
                     <section class="aside-information">
                         <h3>${title}</h3>
                         ${elmText}
-                    </section>`;
-                document.querySelector("aside").innerHTML += section;
+                    </section>
+                `;
+                $(sectionTemplate).appendTo("aside");
             }
 
             let infoItemTemplate = template`
@@ -607,46 +606,34 @@
                     <span>${1}</span>
                 </div>
             `;
-            let infoTexts = "";
+            let infoElmString = "";
             for (const [key, value] of Object.entries(infoData)) {
                 if (value == undefined) { continue };
-                let infoItem = infoItemTemplate(key, value);
-                infoTexts += infoItem;
+                infoElmString += infoItemTemplate(key, value);
             }
-            addAsideInfomation(dataName + "資訊", infoTexts);
+            addAsideInfomation(dataName + "資訊", infoElmString);
 
             if (type == "artist") {
                 addAsideInfomation("簽名", `<img src="${data.signature}" width="80%" style="display: block; margin: auto"></img>`);
             }
 
-            let contentsElm = document.querySelector(".contents");
             for (content of data.contents) {
-                let pElm = document.createElement("p");
-                pElm.innerHTML = content;
-                contentsElm.appendChild(pElm);
+                $(`<p>${content}</p>`).appendTo(".contents");
             }
 
-            document.querySelector(".spotify-embed p").innerHTML = data.spotify_embed;
+            $(".spotify-embed p").html(data.spotify_embed);
 
-            applyTypingEffect();
         }
 
         function spotifyCollapse() {
-            let iframe = document.querySelector(".spotify-embed iframe");
-            let collapseBtn = document.querySelector(".spotify-collapse");
-            if (iframe.height < 600) {
-                iframe.height = 600;
-                collapseBtn.classList.remove("rotate-up");
-                collapseBtn.classList.add("rotate-down");
-            } else {
-                iframe.height = 350;
-                collapseBtn.classList.remove("rotate-down");
-                collapseBtn.classList.add("rotate-up");
-            }
+            let iframe = $(".spotify-embed iframe");
+            let collapseBtn = $(".spotify-collapse");
 
+            iframe.css("height", (iframe.css("height") == "600px") ? "305px" : "600px");
+            collapseBtn.toggleClass("rotate-up");
+            collapseBtn.toggleClass("rotate-down");
         }
 
-        applyData();
 
     </script>
 </body>
