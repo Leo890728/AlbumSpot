@@ -15,10 +15,32 @@
     <title>搜尋</title>
 
     <style>
+        @keyframes gradient {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
         body {
-            background-color: antiquewhite;
-            transition: transform 0.5s;
+            height: 100vh;
+            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+            background-size: 400% 400%;
             margin: 0px;
+            transition: transform 0.5s;
+            animation: gradient 15s ease infinite;
+            
+        }
+
+        hr {
+            width: 100%;
         }
 
         .content {
@@ -50,6 +72,7 @@
                 width: 100%;
                 min-width: 100%;
                 text-align: left;
+                margin-bottom: 20px;
 
                 input[type=text] {
                     width: 50%;
@@ -65,7 +88,7 @@
                 }
             }
 
-            .result-counter{
+            .result-counter {
                 width: 100%;
                 margin: 10px 10px;
                 color: darkgrey;
@@ -140,6 +163,7 @@
         <div class="search-box">
             <input type="text" name="search" placeholder=" 專輯、藝人..">
         </div>
+        <hr>
         <div class="result-counter">
 
         </div>
@@ -206,9 +230,9 @@
                     </div>
                 </article>
             `
-            
+
             function resultSort(a, b) {
-                return a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1 ;
+                return a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1;
             }
 
             let result = [];
@@ -243,7 +267,7 @@
                     );
                 }
             }
-            
+
 
             $('.result-counter').html(`共有 ${result.length} 項關於 <b>" ${keyword} "</b> 的結果`);
             resultContentElm.empty();
