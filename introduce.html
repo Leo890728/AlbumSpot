@@ -454,11 +454,11 @@
 
         function resizeMainContent() {
             let content = $(".main-content");
-            if (content.css("maxWidth") == "1000px") {
-                content.css("maxWidth", "1500px");
+            if (content.css("maxWidth") == "clamp(600px, 65%, 1000px)") {
+                content.css("maxWidth", "clamp(800px, 80%, 1500px)");
                 $(".resize-btn").html('<i class="fa-solid fa-compress"></i>');
             } else {
-                content.css("maxWidth", "1000px");
+                content.css("maxWidth", "clamp(600px, 65%, 1000px)");
                 $(".resize-btn").html('<i class="fa-solid fa-expand"></i>');
             };
         }

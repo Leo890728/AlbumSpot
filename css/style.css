@@ -111,8 +111,7 @@
 .main-content {
     position: relative;
     background-color: rgba(255, 255, 255, 0.8);
-    max-width: 1000px;
-    min-width: 560px;
+    max-width: clamp(600px, 65%, 1000px);
     min-height: 1000px;
     height: auto;
     margin: auto;
@@ -155,7 +154,7 @@
 
         & .side-tools {
             position: sticky;
-            top: 60px;
+            top: 80px;
             color: var(--main-theme);
         }
 
