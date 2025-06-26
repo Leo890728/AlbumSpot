@@ -74,7 +74,6 @@
 
         .contener {
             transition: background-color 0.5s ease;
-            overflow: hidden;
             padding-bottom: 50px;
         }
 
@@ -183,6 +182,7 @@
                 margin: 30px 0px 0px 0px;
                 perspective: 1000px;
                 transition: transform 0.6s;
+                cursor: pointer;
 
                 & .flip-card-inner {
                     position: relative;
@@ -593,6 +593,7 @@
         }
 
         let lastchangeBackgroundElm = null;
+        let changeBackgroundTaskId = null;
         function changeBackgroundByElm(elm) {
             // let background = elm.getAttribute('style').replace('background-image: ', "").replace(';', '');
             // document.querySelector('.flipper-contener').style.backgroundColor = background.match(/rgb\([^)]+\)/g)[0];
@@ -609,9 +610,14 @@
             $(".contener").css("background-color", backgroundColor)
 
             $('.contener').addClass('fade');
-            setTimeout(function () {
+
+            if (changeBackgroundTaskId) {
+                clearTimeout(changeBackgroundTaskId);
+            }
+            changeBackgroundTaskId = setTimeout(function () {
                 document.querySelector(":root").style.setProperty('--contener-bg-image', `url(${elm.querySelector('img').getAttribute('src')})`);
                 $('.contener').removeClass('fade');
+                changeBackgroundTaskId = null;
             }, 500);
    
         }
