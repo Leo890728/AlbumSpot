@@ -426,7 +426,20 @@
             $("#navbar").css("top", "0px");
             applyData();
             applyTypingEffect();
+            delayAnchor();
         })   
+
+        function delayAnchor() {
+            let target = window.location.hash;
+            if (target) {
+                window.location.hash = "";
+                setTimeout(() => {
+                    window.location.hash = target;
+                }, 150);
+            } else {
+                return;
+            }
+        }
 
         function parseUrlArgs() {
             let argsText = location.search.replace("?", "");
