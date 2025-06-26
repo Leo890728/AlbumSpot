@@ -15,6 +15,10 @@
 
 
     <style>
+        :root {
+            --contener-bg-image: url("img/img_parallax.jpg");
+        }
+
         body,
         html {
             height: 100%;
@@ -22,21 +26,15 @@
             font: 400 15px/1.8 "Lato", sans-serif;
         }
 
-        .bgimg-1,
-        .bgimg-2,
-        .bgimg-3 {
+        .bgimg-1 {
             position: relative;
+            height: 100%;
             opacity: 0.65;
+            background-image: url("img/img_parallax.jpg");
+            background-attachment: fixed;
             background-position: center;
             background-repeat: no-repeat;
             background-size: cover;
-
-        }
-
-        .bgimg-1 {
-            background-image: url("img/img_parallax.jpg");
-            height: 100%;
-            background-attachment: fixed;
         }
 
         .caption {
@@ -45,7 +43,7 @@
             top: 50%;
             width: 100%;
             text-align: center;
-            color: #000000;
+            color: transparent;
 
             & span.border {
                 background-color: #ffffff;
@@ -67,19 +65,47 @@
             justify-content: flex-end;
         }
 
-        .contener {
-            height: calc(100% - 65px);
-            /* background-image: linear-gradient(rgba(255, 255, 255, 0.5), rgba(100, 100, 100, 0.3)); */
+        .contener section {
+            text-align: center;
+            font-size: 25px;
+        }
 
-            & section {
-                text-align: center;
-                font-size: 25px;
-            }
+        .contener::before {
+            height: fit-content;
+            min-height: 100vh;
+            width: 100%;
+            padding-bottom: 50px;
+            position: absolute;
+            top: 100vh; 
+            left: 0;
+            content: "";
+            background-image: var(--contener-bg-image);
+            background-size: 400% 400%;
+            background-attachment: fixed;
+            animation-name: backgroundRotate;
+            animation-duration: 20s;
+            animation-iteration-count: infinite;
+            animation-direction: alternate-reverse;
+            transition: opacity 0.5s ease;
+            filter: blur(50px);
+        }
+
+        .contener.fade::before {
+            opacity: 0;
+            transition: opacity 0.5s ease;
         }
 
         nav {
             width: 100%;
-            border-bottom: 1px solid rgb(0, 0, 0);
+            backdrop-filter: blur(25px);
+            box-shadow: 0px 5px 10px rgba(255, 255, 255, 0.5);
+
+            & h1 {
+                margin: 0;
+                color: white;
+                padding: 10px 0;
+                text-shadow: black 1px 0 10px;
+            }
 
             & ul {
                 margin: 0;
@@ -91,7 +117,7 @@
                 & li {
                     width: 25%;
                     transition: border-color 1s;
-                    border-bottom: 3px solid #ffffff;
+                    border-bottom: 3px solid transparent;
                     border-collapse: collapse;
 
                     & a {
@@ -101,18 +127,21 @@
                         font-weight: bold;
                         text-align: center;
                         text-decoration: none;
-                        color: gray;
-                        transition: color 0.5s;
+                        color: lightgray;
+                        text-shadow: darkgray 1px 0 10px;
+                        transition: color 0.5s, font-size 0.5s, text-shadow 0.5s;
                     }
                 }
 
                 & li:hover {
                     /* background-color: rgba(241, 241, 241, 0.8); */
-                    border-color: gray;
+                    border-color: white;
                     font-weight: bold;
 
                     & a {
-                        color: black;
+                        color: white;
+                        text-shadow: black 1px 0 10px;
+                        font-size: 22px;
                     }
                 }
             }
@@ -128,18 +157,17 @@
 
         .flipper-contener {
             display: flex;
-            padding-top: 50px;
             justify-content: space-evenly;
             flex-wrap: wrap;
             transition: background 0.5s ease;
-            /* box-shadow: inset 0 0 10px 5px rgba(0, 0, 0, 0.3); */
             height: auto;
+            width: 100%;
 
             & .flip-card {
                 background-color: transparent;
                 width: 240px;
                 height: 305px;
-                margin: 30px 0px 0px 20px;
+                margin: 30px 0px 0px 0px;
                 perspective: 1000px;
                 transition: transform 0.6s;
 
@@ -289,6 +317,24 @@
 
         }
 
+        @keyframes backgroundRotate {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            25% {
+                background-position: 75% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 25% 50%;
+            }
+        }
+
 
         /* 跑馬燈 */
         @keyframes marquee {
@@ -360,14 +406,9 @@
     </div>
 
     <div class="contener">
-
         <section>
-            <h1>&nbsp</h1>
-        </section>
-
-        <section>
-
             <nav>
+                <h1>&nbsp</h1>
                 <ul>
                     <li><a href="#album" id="album">專輯</a></li>
                     <li><a href="#artist" id="artist">藝人</a></li>
@@ -537,12 +578,28 @@
             });
         }
 
+        let lastchangeBackgroundElm = null;
         function changeBackgroundByElm(elm) {
-            let background = elm.getAttribute('style').replace('background-image: ', "").replace(';', '');
-            document.querySelector('.flipper-contener').style.backgroundColor = background.match(/rgb\([^)]+\)/g)[0];
+            // let background = elm.getAttribute('style').replace('background-image: ', "").replace(';', '');
+            // document.querySelector('.flipper-contener').style.backgroundColor = background.match(/rgb\([^)]+\)/g)[0];
 
-            // let background = elm.getAttribute('style');
-            // document.querySelector('.flipper-contener').style.background = background.slice(12, -1);
+            if (lastchangeBackgroundElm === elm) {
+                return;
+            } else {
+                lastchangeBackgroundElm = elm;
+            }
+            
+            let background = elm.getAttribute('style').replace('background-image: ', "").replace(';', '');
+            let backgroundColor = background.match(/rgb\([^)]+\)/g)[0];
+
+            $(".contener").css("background-color", backgroundColor)
+
+            $('.contener').addClass('fade');
+            setTimeout(function () {
+                document.querySelector(":root").style.setProperty('--contener-bg-image', `url(${elm.querySelector('img').getAttribute('src')})`);
+                $('.contener').removeClass('fade');
+            }, 500);
+   
         }
 
         function onLoadAnimation() {
