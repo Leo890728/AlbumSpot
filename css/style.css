@@ -58,6 +58,7 @@
     transition: top 0.3s;
     background-color: rgba(51, 51, 51, 1);
     align-content:center;
+    z-index: 10;
 
     & .logo {
         display: flex;

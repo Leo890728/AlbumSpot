@@ -24,6 +24,7 @@
             height: 100%;
             margin: 0;
             font: 400 15px/1.8 "Lato", sans-serif;
+            scroll-behavior: smooth;
         }
 
         .bgimg-1 {
@@ -99,11 +100,15 @@
             width: 100%;
             backdrop-filter: blur(25px);
             box-shadow: 0px 5px 10px rgba(255, 255, 255, 0.5);
+            position: sticky;
+            top: -20px;
+            z-index: 1;
 
             & h1 {
                 margin: 0;
                 color: white;
                 padding: 10px 0;
+                font-size: 35px;
                 text-shadow: black 1px 0 10px;
             }
 
@@ -128,9 +133,10 @@
                         text-align: center;
                         text-decoration: none;
                         color: lightgray;
-                        text-shadow: darkgray 1px 0 10px;
+                        text-shadow: black 1px 0 10px;
                         transition: color 0.5s, font-size 0.5s, text-shadow 0.5s;
                     }
+
                 }
 
                 & li:hover {
@@ -406,12 +412,12 @@
     </div>
 
     <div class="contener">
-        <section>
+        <section id="content-top">
             <nav>
                 <h1>&nbsp</h1>
                 <ul>
-                    <li><a href="#album" id="album">專輯</a></li>
-                    <li><a href="#artist" id="artist">藝人</a></li>
+                    <li><a href="#content-top" id="album">專輯</a></li>
+                    <li><a href="#content-top" id="artist">藝人</a></li>
                 </ul>
             </nav>
 
