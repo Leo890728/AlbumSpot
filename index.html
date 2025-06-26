@@ -17,6 +17,7 @@
     <style>
         :root {
             --contener-bg-image: url("img/img_parallax.jpg");
+            --contener-bg-height: 100vh;
         }
 
         body,
@@ -71,13 +72,18 @@
             font-size: 25px;
         }
 
-        .contener::before {
-            height: fit-content;
-            min-height: 100vh;
-            width: 100%;
+        .contener {
+            transition: background-color 0.5s ease;
+            overflow: hidden;
             padding-bottom: 50px;
+        }
+
+        .contener::before {
+            min-height: 100vh;
+            height: var(--contener-bg-height);
+            width: 100%;
             position: absolute;
-            top: 100vh; 
+            top: 100vh;
             left: 0;
             content: "";
             background-image: var(--contener-bg-image);
@@ -94,6 +100,7 @@
         .contener.fade::before {
             opacity: 0;
             transition: opacity 0.5s ease;
+            height: fit-content;
         }
 
         nav {
@@ -571,6 +578,7 @@
                     }
                 }
             }
+            document.querySelector(":root").style.setProperty('--contener-bg-height', $(".contener").outerHeight() + "px");
         }
 
         function pushCover() {
@@ -618,8 +626,6 @@
                 pushFlipCard();
             }, 1500);
         }
-
-        
 
     </script>
 
