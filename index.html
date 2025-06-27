@@ -73,6 +73,7 @@
         }
 
         .contener {
+            min-height: 100vh;
             transition: background-color 0.5s ease;
             padding-bottom: 50px;
         }
@@ -176,7 +177,6 @@
             width: 100%;
 
             & .flip-card {
-                background-color: transparent;
                 width: 240px;
                 height: 305px;
                 margin: 30px 0px 0px 0px;
@@ -439,65 +439,80 @@
 
     <script>
 
-        $(document).on("scroll", function () { scrollFunction() });
+        $(document).on("scroll", handleScrollEffects);
 
         $(document).ready(function (){
-                pushCover();
+                populateMarqueeCovers();
                 applyTypingEffect();
+
+                setTimeout(() => {
+                    if (window.location.hash === '#album') {
+                        flipCard('front');
+                    } else if (window.location.hash === '#artist') {
+                        flipCard('back');
+                    } else {
+                        flipCard('front');
+                    }
+                }, 500);
             }
         )
 
         $('#album').on('click', function () {
-            let cards = $('.flip-card');
-
-            cards.each((index, card) => {
-                setTimeout(() => {
-                    let inner = $(card).find(".flip-card-inner");
-                    
-                    if (inner.find(".flip-card-back").length == 0) { 
-                        inner.fadeIn("slow"); 
-                    }
-                    inner.removeClass('rotate-back');
-                    inner.addClass('rotate-front');
-
-                }, 200 * index);
-            });
+            flipCard('front');
         });
 
         $('#artist').on('click', function () {
+            flipCard('back');
+        });
+
+
+        function flipCard(side) {
             let cards = $('.flip-card');
 
             cards.each((index, card) => {
                 setTimeout(() => {
                     let inner = $(card).find(".flip-card-inner");
 
-                    inner.removeClass('rotate-front');
-                    inner.addClass('rotate-back');
-                    if (inner.find(".flip-card-back").length == 0) {
-                        inner.fadeOut('fast');
-                    } 
+                    if (side === 'front') {
+                        if (inner.find(".flip-card-back").length == 0) { 
+                            inner.fadeIn("slow"); 
+                        }
+                        inner.removeClass('rotate-back');
+                        inner.addClass('rotate-front');
+                    } else {
+                        inner.removeClass('rotate-front');
+                        inner.addClass('rotate-back');
+                        if (inner.find(".flip-card-back").length == 0) {
+                            inner.fadeOut('fast');
+                        } 
+                    }
 
                 }, 200 * index);
             });
-        });
+        }
 
 
-        function scrollFunction() {
+        function handleScrollEffects() {
             let scrollHeight = $(document).scrollTop();
             $("#navbar").css("top", (scrollHeight > 20) ? "0px" : "-60px");
             
+            let hasAnchor = window.location.hash === '#album' || window.location.hash === '#artist';
             if (scrollHeight >= 120) {
-                onLoadAnimation();
-                onLoadAnimation = function () { };
+                setTimeout(function () {
+                    subtitleTypingAnimation();
+                    subtitleTypingAnimation = function () { };
+                }, hasAnchor ? 0 : 500);
             }
             if (scrollHeight >= 150) {
-                onLoadAnimation2();
-                onLoadAnimation2 = function () { };
+                setTimeout(function () {
+                    generateFlipCardsAnimation();
+                    generateFlipCardsAnimation = function () { };
+                }, hasAnchor ? 0 : 1500);
             }
         }
 
         
-        function pushFlipCard() {
+        function generateFlipCards() {
             let flipperContener = document.querySelector('.flipper-contener');
             let albums = ALBUMS;
             let artists = ARTISTS;
@@ -578,10 +593,11 @@
                     }
                 }
             }
+            
             document.querySelector(":root").style.setProperty('--contener-bg-height', $(".contener").outerHeight() + "px");
         }
 
-        function pushCover() {
+        function populateMarqueeCovers() {
             let marquees = $('.coverMarquee');
             let albums = [...ALBUMS];
             marquees.each(function (index, marquee) {
@@ -622,15 +638,12 @@
    
         }
 
-        function onLoadAnimation() {
-            setTimeout(function () {
-                typingEffect(document.querySelector('section h1'), '踏上探索音樂之旅', 100, '_', false);
-            }, 500);
+        function subtitleTypingAnimation() {
+            typingEffect(document.querySelector('section h1'), '踏上探索音樂之旅', 100, '_', false);
         }
-        function onLoadAnimation2() {
-            setTimeout(function () {
-                pushFlipCard();
-            }, 1500);
+
+        function generateFlipCardsAnimation() {
+            generateFlipCards();
         }
 
     </script>
