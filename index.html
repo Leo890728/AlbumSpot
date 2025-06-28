@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="img/favicon.ico">
     <title>AlbumSpot | 主頁</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/color-thief/2.3.0/color-thief.umd.js"></script>
     <script src="js/jquery-3.7.1.min.js"></script>
@@ -16,7 +17,7 @@
 
     <style>
         :root {
-            --contener-bg-image: url("img/img_parallax.jpg");
+            --contener-bg-image: url("img/img_parallax.webp");
             --contener-bg-height: 100vh;
         }
 
@@ -32,7 +33,7 @@
             position: relative;
             height: 100%;
             opacity: 0.65;
-            background-image: url("img/img_parallax.jpg");
+            background-image: url("img/img_parallax.webp");
             background-attachment: fixed;
             background-position: center;
             background-repeat: no-repeat;
@@ -94,7 +95,7 @@
             animation-iteration-count: infinite;
             animation-direction: alternate-reverse;
             transition: opacity 0.5s ease;
-            filter: blur(50px);
+            filter: blur(80px);
         }
 
         .contener.fade::before {
@@ -143,7 +144,6 @@
                         text-shadow: black 1px 0 10px;
                         transition: color 0.5s, font-size 0.5s, text-shadow 0.5s;
                     }
-
                 }
 
                 & li:hover {
@@ -390,7 +390,7 @@
     <header>
         <div id="navbar">
             <div class="logo" onclick="redirect('index.html')">
-                <img src="img/logo.png" alt="">
+                <img src="img/logo.webp" alt="">
                 <span>AlbumSpot</span>
             </div>
             <div class="navs">
