@@ -14,6 +14,9 @@
     <script src="js/utile.js"></script>
     <script src="js/data.js"></script>
 
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
     <title>搜尋</title>
 
     <style>
@@ -31,6 +34,10 @@
             }
         }
 
+        html {
+            scroll-behavior: smooth;
+        }
+
         body {
             height: 100vh;
             background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
@@ -38,24 +45,24 @@
             margin: 0px;
             transition: transform 0.5s;
             animation: gradient 15s ease infinite;
-            
         }
 
         hr {
             width: 100%;
         }
 
-        .content {
+        .main-content {
             display: flex;
             background-color: rgba(255, 255, 255, 0.8);
-            max-width: 1000px;
-            min-width: 500px;
+            max-width: 1200px;
+            min-width: 450px;
+            width: 40vw;
             min-height: 80vh;
             height: auto;
             margin: auto;
             border-radius: 5px;
             padding: 20px 40px;
-            transition: max-width 0.5s;
+            transition: max-width 0.5s, width 0.5s, min-width 0.5s;
 
             flex-direction: column;
             align-items: center;
@@ -66,35 +73,56 @@
                 margin-bottom: 20px;
                 font-family: monospace;
                 font-weight: bolder;
-                text-align: left;
+                text-align: center;
                 width: 100%;
             }
 
             .search-box {
+                display: flex;
                 width: 100%;
-                min-width: 100%;
+                min-width: 200px;
+                max-width: 400px;
                 text-align: left;
                 margin-bottom: 20px;
+                justify-content: center;
 
                 input[type=text] {
                     width: 50%;
                     height: 30px;
                     border-radius: 10px;
-                    border: 3px solid gray;
+                    border: 1px solid rgba(128, 128, 128, 0.5);
+                    background-color: rgba(255, 255, 255, 0.2);
+                    backdrop-filter: blur(5px);
+                    text-indent: 15px;
+                    color: darkgrey;
+                    border-radius: 50px;
                     -webkit-transition: width 0.4s ease-in-out;
-                    transition: width 0.4s ease-in-out;
+                    transition: width 0.4s ease-in-out, border 0.4s ease-in-out, background-color 0.4s ease-in-out;
                 }
 
                 input[type=text]:focus {
-                    width: 100%;
+                    width: 400px;
+                    color: black;
+                    border: 2px solid gray;
+                    background-color: rgba(255, 255, 255, 0.8);
                 }
             }
 
             .result-counter {
+                position: sticky;
+                top: 80px;
                 width: 100%;
                 margin: 10px 10px;
                 color: darkgrey;
                 font-weight: 600;
+                letter-spacing: 1px;
+                text-wrap: nowrap;
+                white-space: nowrap;
+                backdrop-filter: blur(5px);
+                transition: width 0.5s, border-color 0.5s, color 0.5s, border-width 0.5s, background-color 0.5s, text-shadow 0.5s;
+                border-radius: 50px;
+                border-color: lightgray;
+                padding: 10px 20px;
             }
         }
 
@@ -157,7 +185,18 @@
         </div>
     </div>
 
-    <div class="content">
+    <div class="main-content">
+
+        <div class="side-tools-wrap">
+            <div class="side-tools">
+                <div class="side-tool" onclick="window.scrollTo({top: 0, behavior: 'smooth'});">
+                    <i class="fa-solid fa-caret-up"></i>
+                </div>
+                <div class="side-tool" onclick="window.scrollTo({top: document.body.scrollHeight, behavior: 'smooth'});">
+                    <i class="fa-solid fa-caret-down"></i>
+                </div>
+            </div>
+        </div>
 
         <div class="search-header">
             <span>尋找藝人或專輯</span>
@@ -167,7 +206,7 @@
         </div>
         <hr>
         <div class="result-counter">
-
+            <span></span>
         </div>
 
         <div class="result-content">
@@ -191,13 +230,37 @@
     </div>
 
     <script>
+
+        $(document).on("scroll", handleScrollEffects);
+
         $(document).ready(() => {
             $("#navbar").css("top", "0px");
             $(".search-box input").on('input', function (event) {
                 search($(event.target).val());
-            })
+            })                                                                                                                                                                                                                  
         });
 
+        function handleScrollEffects() {
+            let scrollHeight = $(document).scrollTop();
+
+            if (scrollHeight >= 120) {
+                $(".result-counter").css({
+                    "width": $(".result-counter span").innerWidth(),
+                    "color": "grey",
+                    "textShadow": "white 0px 0px 5px",
+                    "backgroundColor": "rgba(255, 255, 255, 0.1)",
+                });
+                
+            } else {
+                $(".result-counter").css({
+                    "width": "100%",
+                    "color": "darkgrey",
+                    "textShadow": "none",
+                    "backgroundColor": "rgba(255, 255, 255, 0)"
+                });
+            }
+
+        }
 
         function changeBackgroundColorByElm(elm) {
             let imageUrl = $(elm).find('img').attr('src');
@@ -213,8 +276,12 @@
             var artists = ARTISTS;
             let resultContentElm = $(".result-content");
 
-            $('.result-counter').text("");
-            if (keyword == "") { resultContentElm.empty(); return }
+            $('.result-counter').animate({opacity: 0}, 100);
+            if (keyword == "") { 
+                $(".main-content").css("width", "40vw");
+                resultContentElm.empty(); 
+                return 
+            }
 
             let resultTemplate = template`
                 <article onclick="redirect('${4}')" onmouseover="changeBackgroundColorByElm(this);" onmouseout="this.style.backgroundColor='rgba(0,0,0,0)'">
@@ -270,13 +337,21 @@
                 }
             }
 
-
-            $('.result-counter').html(`共有 ${result.length} 項關於 <b>" ${keyword} "</b> 的結果`);
-            resultContentElm.empty();
-            for (let res of result) {
-                $(res).appendTo(resultContentElm);
-            }
-
+            $(document).scrollTop(0);
+            setTimeout(() => {
+                $(".main-content").css("width", "60vw");
+                $('.result-counter').html(`<span>共有 ${result.length} 項關於 <b>" ${keyword} "</b> 的結果</span>`).css("opacity", "1");
+                resultContentElm.empty();
+                result.forEach((res, index) => {
+                    res = $(res).css("opacity", "0");
+                    res.appendTo(resultContentElm);
+                    setTimeout(() => {
+                        res.animate({
+                            opacity: 1
+                        }, 250);
+                    }, 100 * index+1);
+                });
+            }, 250)
         }
 
 
