@@ -210,7 +210,22 @@
                 color: var(--main-theme);
             }
 
+            span {
+                transition: font-weight .4s ease-in-out, color 0.5s ease-in-out;
+                color: black;
+                font-weight: 400;
+            }
+    
+            span.rest-text.activate {
+                color: darkslategray;
+            }
+    
+            span.bionic-text.activate {
+                color: black;
+                font-weight: 900;
+            }
         }
+        
 
         .spotify-embed {
 
@@ -352,6 +367,9 @@
 
         <div class="side-tools-wrap">
             <div class="side-tools">
+                <div class="side-tool bionic-read" onclick="toggleBionicReadMode();">
+                    <i class="fa-regular fa-b"></i>
+                </div>
                 <div class="side-tool resize-btn" onclick="resizeMainContent();">
                     <i class="fa-solid fa-expand"></i>
                 </div>
@@ -477,6 +495,50 @@
                 content.css("maxWidth", "clamp(600px, 65%, 1000px)");
                 $(".resize-btn").html('<i class="fa-solid fa-expand"></i>');
             };
+        }
+
+        function bionicReadMode() {
+            let content = $(".contents");
+            content.addClass("bionic-read-mode");
+            for (let p of content.find("p")) {
+                let text = $(p).text();
+                if (text.length > 0) {
+                    let words = text.split(" ");
+                    let texts = words.map((word, index) => {
+                        let cleanWord = word.match(/[a-zA-Z\']+/g);
+                        if (!cleanWord) {
+                            return word;
+                        }
+                        
+                        let bionicText = cleanWord[0].slice(0, Math.ceil(cleanWord[0].length / 2));
+                        let restText = cleanWord[0].slice(Math.ceil(cleanWord[0].length / 2));
+                        
+                        return word.replace(cleanWord[0], `<span class="bionic-text">${bionicText}</span><span class="rest-text">${restText}</span>`);
+                    }).join(" ");
+                    $(p).html(texts);
+                    setTimeout(() => {
+                        $(p).find("span").each((index, element) => {
+                            setTimeout(() => {
+                                $(element).addClass("activate")
+                            }, index * 1);
+                        });
+                    }, 100)
+                }   
+            }
+        }
+
+        function toggleBionicReadMode() {
+            let content = $(".contents");
+
+            if (content.hasClass("bionic-read-mode")) {
+                content.removeClass("bionic-read-mode");
+                content.find("span").removeClass("activate");
+                $(".side-tool.bionic-read i").removeClass("fa-solid").addClass("fa-regular");
+            } else {
+                content.addClass("bionic-read-mode");
+                bionicReadMode();
+                $(".side-tool.bionic-read i").removeClass("fa-regular").addClass("fa-solid");
+            }
         }
 
         function applyData() {
