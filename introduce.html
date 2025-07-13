@@ -499,46 +499,54 @@
 
         function bionicReadMode() {
             let content = $(".contents");
+            const wordProcessor = (word) => {
+                let hyphenWords = word.split("-");
+                let hyphenWordsResult = "";
+                if (hyphenWords.length > 1) {
+                    return hyphenWords.map(wordProcessor).join("-");
+                }
+                
+                let cleanWord = word.match(/[a-zA-Z\']+/g);
+                if (!cleanWord) {
+                    return word;
+                }
+                
+                let bionicText = cleanWord[0].slice(0, Math.ceil(cleanWord[0].length / 2));
+                let restText = cleanWord[0].slice(Math.ceil(cleanWord[0].length / 2));
+                
+                return word.replace(cleanWord[0], `<span class="bionic-text">${bionicText}</span><span class="rest-text">${restText}</span>`);
+            }
             content.addClass("bionic-read-mode");
             for (let p of content.find("p")) {
                 let text = $(p).text();
                 if (text.length > 0) {
                     let words = text.split(" ");
-                    let texts = words.map((word, index) => {
-                        let cleanWord = word.match(/[a-zA-Z\']+/g);
-                        if (!cleanWord) {
-                            return word;
-                        }
-                        
-                        let bionicText = cleanWord[0].slice(0, Math.ceil(cleanWord[0].length / 2));
-                        let restText = cleanWord[0].slice(Math.ceil(cleanWord[0].length / 2));
-                        
-                        return word.replace(cleanWord[0], `<span class="bionic-text">${bionicText}</span><span class="rest-text">${restText}</span>`);
-                    }).join(" ");
+                    let texts = words.map(wordProcessor).join(" ");
                     $(p).html(texts);
-                    setTimeout(() => {
-                        $(p).find("span").each((index, element) => {
-                            setTimeout(() => {
-                                $(element).addClass("activate")
-                            }, index * 1);
-                        });
-                    }, 100)
                 }   
             }
         }
 
         function toggleBionicReadMode() {
             let content = $(".contents");
+            let status = content.hasClass("bionic-read-mode");
 
-            if (content.hasClass("bionic-read-mode")) {
+            if (status) {
                 content.removeClass("bionic-read-mode");
-                content.find("span").removeClass("activate");
                 $(".side-tool.bionic-read i").removeClass("fa-solid").addClass("fa-regular");
             } else {
                 content.addClass("bionic-read-mode");
-                bionicReadMode();
                 $(".side-tool.bionic-read i").removeClass("fa-regular").addClass("fa-solid");
+                bionicReadMode();
             }
+
+            $(content).find("p").each((i, p) => {
+                $(p).find("span").each((index, element) => {
+                    setTimeout(() => {
+                        status ? $(element).removeClass("activate") : $(element).addClass("activate");
+                    }, index * 1);
+                });
+            });
         }
 
         function applyData() {
